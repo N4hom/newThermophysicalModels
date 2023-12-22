@@ -1,0 +1,1 @@
+../myAtomicWeights/myAtomicWeights.C

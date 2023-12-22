@@ -1,0 +1,1 @@
+../reaction/reactionRate/solidIsothermalReactionRate/solidIsothermalReactionRateI.H
