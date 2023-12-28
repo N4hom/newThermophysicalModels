@@ -2,17 +2,20 @@ EXE_INC = \
     -I$(LIB_SRC)/finiteVolume/lnInclude \
     -I$(LIB_SRC)/meshTools/lnInclude \
     -I$(LIB_SRC)/transportModels/compressible/lnInclude \
+    -I$(FOAM_SRC)/thermophysicalModels/mySpecie/lnInclude \
     -I$(LIB_SRC)/thermophysicalModels/thermophysicalProperties/lnInclude \
+    -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \
     -I$(FOAM_SRC)/tableReaders/lnInclude \
-    -I$(FOAM_SRC)/thermophysicalModels/mySpecie/lnInclude 
 
 LIB_LIBS = \
     -lfiniteVolume \
     -lmeshTools \
     -lcompressibleTransportModels \
     -lthermophysicalProperties \
-    -L$(FOAM_USER_LIBBIN) -lTableReaders \
-    -L$(FOAM_USER_LIBBIN) -lmySpecie
+    -lfluidThermophysicalModels \
+    -L$(FOAM_USER_LIBBIN) \
+    -lTableReaders  \
+    -lmySpecie
 
 
 

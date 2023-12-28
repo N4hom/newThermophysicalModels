@@ -30,29 +30,29 @@ License
 /* * * * * * * * * * * * * * * private static data * * * * * * * * * * * * * */
 
 template<class Thermo, template<class> class Type>
-const Foam::scalar Foam::species::myThermo<Thermo, Type>::tol_ = 1.0e-4;
+const Foam::scalar Foam::mySpecies::thermo<Thermo, Type>::tol_ = 1.0e-4;
 
 template<class Thermo, template<class> class Type>
-const int Foam::species::myThermo<Thermo, Type>::maxIter_ = 100;
+const int Foam::mySpecies::thermo<Thermo, Type>::maxIter_ = 100;
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class Thermo, template<class> class Type>
-Foam::species::myThermo<Thermo, Type>::myThermo(const dictionary& dict)
+Foam::mySpecies::thermo<Thermo, Type>::thermo(const dictionary& dict)
 :
     Thermo(dict)
 {
-    Info << "Constructing myThermo derived from " << 
-    Thermo::typeName() <<  " and " << Type<myThermo<Thermo, Type>>::typeName() << endl;
-    Info << "myThermo typeName " << typeName() << endl;
+    Info << "Constructing thermo derived from " << 
+    Thermo::typeName() <<  " and " << Type<thermo<Thermo, Type>>::typeName() << endl;
+    Info << "thermo typeName " << typeName() << endl;
 }
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 template<class Thermo, template<class> class Type>
-void Foam::species::myThermo<Thermo, Type>::write(Ostream& os) const
+void Foam::mySpecies::thermo<Thermo, Type>::write(Ostream& os) const
 {
     Thermo::write(os);
 }
@@ -61,9 +61,9 @@ void Foam::species::myThermo<Thermo, Type>::write(Ostream& os) const
 // * * * * * * * * * * * * * * * Ostream Operator  * * * * * * * * * * * * * //
 
 template<class Thermo, template<class> class Type>
-Foam::Ostream& Foam::species::operator<<
+Foam::Ostream& Foam::mySpecies::operator<<
 (
-    Ostream& os, const myThermo<Thermo, Type>& st
+    Ostream& os, const thermo<Thermo, Type>& st
 )
 {
     st.write(os);

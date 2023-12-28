@@ -63,7 +63,7 @@ protected:
     // Protected data
 
         //- Density field [kg/m^3]
-        //  Named 'thermo' to avoid (potential) conflict with solver density
+        //  Named 'myRhoThermo' to avoid (potential) conflict with solver density
         volScalarField rho_;
 
         //- Compressibility [s^2/m^2]
@@ -72,8 +72,6 @@ protected:
         //- Dynamic viscosity [kg/m/s]
         volScalarField mu_;
 
-        //- Speed of sound [m/s]
-        volScalarField speedOfSound_;
 
     // Protected Member Functions
 
@@ -194,13 +192,6 @@ public:
 
             //- Dynamic viscosity of mixture for patch [kg/m/s]
             virtual tmp<scalarField> mu(const label patchi) const;
-
-
-            //- Return speed of sound
-            virtual volScalarField& speedOfSound();
-
-            //- Return speed of sound (const)
-            virtual const volScalarField& speedOfSound() const;
 };
 
 

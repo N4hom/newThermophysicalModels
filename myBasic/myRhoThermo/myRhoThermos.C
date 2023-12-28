@@ -30,14 +30,15 @@ License
 #include "myMakeThermo.H"
 
 #include "mySpecie.H"
-#include "tabulatedEOS.H"
+#include "perfectGas.H"
+//#include "tabulatedThermoEOS.H"
 
-
-#include "eTabulated.H"
-#include "tabulatedInternalEnergy.H"
+#include "eConstThermo.H"
+#include "sensibleInternalEnergy.H"
 #include "myThermo.H"
+//#include "eTabulated.H"
 
-#include "constTransport.H"
+#include "myConstTransport.H"
 
 #include "myHeRhoThermo.H"
 #include "pureMixture.H"
@@ -49,31 +50,19 @@ namespace Foam
 
 /* * * * * * * * * * * * * * * Private Static Data * * * * * * * * * * * * * */
 
-
 makeThermos
 (
     myRhoThermo,
     myHeRhoThermo,
     pureMixture,
-    constTransport,
-    tabulatedInternalEnergy,
-    eTabulated,
-    tabulatedEOS,
+    myConstTransport,
+    sensibleInternalEnergy,
+    eConstThermo,
+    perfectGas,
     mySpecie
 );
 
 
-/*makeThermos
-(
-    myThermo,
-    heMyThermo,
-    pureMixture,
-    constTransport,
-    sensibleInternalEnergy,
-    eConstThermo,
-    perfectGas,
-    specie
-);*/
 
 
 

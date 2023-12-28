@@ -321,7 +321,7 @@ Foam::myBasicThermo::myBasicThermo
         (
             myBasicThermo::phasePropertyName
             (
-                "thermo:e", phaseName
+                "e", phaseName
             ),
             mesh.time().timeName(),
             mesh,

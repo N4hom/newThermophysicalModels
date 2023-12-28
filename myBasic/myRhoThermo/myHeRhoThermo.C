@@ -36,14 +36,13 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
     const volScalarField& p,
     volScalarField& T,
     volScalarField& he,
-    volScalarField& speedOfSound,
+    volScalarField& psi,
     volScalarField& rho,
     volScalarField& mu,
     volScalarField& alpha,
     const bool doOldTimes
 )
 {
-    Info << "Calculating thermo quantities " << endl;
     // Note: update oldTimes before current time so that if T.oldTime() is
     // created from T, it starts from the unconverted T
     if (doOldTimes && (p.nOldTimes() || T.nOldTimes()))
@@ -53,7 +52,7 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
             p.oldTime(),
             T.oldTime(),
             he.oldTime(),
-            speedOfSound.oldTime(),
+            psi.oldTime(),
             rho.oldTime(),
             mu.oldTime(),
             alpha.oldTime(),
@@ -65,7 +64,7 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
     const scalarField& pCells = p.primitiveField();
 
     scalarField& TCells = T.primitiveFieldRef();
-    scalarField& speedOfSoundCells = speedOfSound.primitiveFieldRef();
+    scalarField& psiCells = psi.primitiveFieldRef();
     scalarField& rhoCells = rho.primitiveFieldRef();
     scalarField& muCells = mu.primitiveFieldRef();
     scalarField& alphaCells = alpha.primitiveFieldRef();
@@ -75,7 +74,7 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
         const typename MixtureType::thermoType& mixture_ =
             this->cellMixture(celli);
 
-        if (this->updateT() && !initialize_)
+        if (this->updateT())
         {
             TCells[celli] = mixture_.THE
             (
@@ -85,20 +84,16 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
             );
         }
 
-        speedOfSoundCells[celli] = mixture_.cSqr(pCells[celli], TCells[celli]);
+        psiCells[celli] = mixture_.psi(pCells[celli], TCells[celli]);
         rhoCells[celli] = mixture_.rho(pCells[celli], TCells[celli]);
-        Info << "rhoCells[celli] " << rhoCells[celli] << endl;
 
         muCells[celli] = mixture_.mu(pCells[celli], TCells[celli]);
         alphaCells[celli] = mixture_.alphah(pCells[celli], TCells[celli]);
-
-       
     }
-
 
     const volScalarField::Boundary& pBf = p.boundaryField();
     volScalarField::Boundary& TBf = T.boundaryFieldRef();
-    volScalarField::Boundary& speedOfSoundBf = speedOfSound.boundaryFieldRef();
+    volScalarField::Boundary& psiBf = psi.boundaryFieldRef();
     volScalarField::Boundary& rhoBf = rho.boundaryFieldRef();
     volScalarField::Boundary& heBf = he.boundaryFieldRef();
     volScalarField::Boundary& muBf = mu.boundaryFieldRef();
@@ -108,7 +103,7 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
     {
         const fvPatchScalarField& pp = pBf[patchi];
         fvPatchScalarField& pT = TBf[patchi];
-        fvPatchScalarField& pspeedOfSound = speedOfSoundBf[patchi];
+        fvPatchScalarField& ppsi = psiBf[patchi];
         fvPatchScalarField& prho = rhoBf[patchi];
         fvPatchScalarField& phe = heBf[patchi];
         fvPatchScalarField& pmu = muBf[patchi];
@@ -118,15 +113,13 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
         {
             forAll(pT, facei)
             {
-                Info << "pT.fixesValue() is true " << endl; 
                 const typename MixtureType::thermoType& mixture_ =
                     this->patchFaceMixture(patchi, facei);
 
                 phe[facei] = mixture_.HE(pp[facei], pT[facei]);
 
-                pspeedOfSound[facei] = mixture_.cSqr(pp[facei], pT[facei]);
+                ppsi[facei] = mixture_.psi(pp[facei], pT[facei]);
                 prho[facei] = mixture_.rho(pp[facei], pT[facei]);
-                Info << "rho boundaryField " << prho[facei] << endl;
                 pmu[facei] = mixture_.mu(pp[facei], pT[facei]);
                 palpha[facei] = mixture_.alphah(pp[facei], pT[facei]);
             }
@@ -138,24 +131,18 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
                 const typename MixtureType::thermoType& mixture_ =
                     this->patchFaceMixture(patchi, facei);
 
-                if (this->updateT() && !initialize_)
+                if (this->updateT())
                 {
-                    if (!initialize_)
-                    {
-                        
-                        Info << "!initialize_ " << !initialize_ << endl;
-                    }
                     pT[facei] = mixture_.THE(phe[facei], pp[facei], pT[facei]);
                 }
 
-                pspeedOfSound[facei] = mixture_.cSqr(pp[facei], pT[facei]);
+                ppsi[facei] = mixture_.psi(pp[facei], pT[facei]);
                 prho[facei] = mixture_.rho(pp[facei], pT[facei]);
                 pmu[facei] = mixture_.mu(pp[facei], pT[facei]);
                 palpha[facei] = mixture_.alphah(pp[facei], pT[facei]);
             }
         }
     }
-
 }
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
@@ -167,8 +154,7 @@ Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::myHeRhoThermo
     const word& phaseName
 )
 :
-    myHeThermo<BasicPsiThermo, MixtureType>(mesh, phaseName),
-    initialize_(true)
+    myHeThermo<BasicPsiThermo, MixtureType>(mesh, phaseName)
 {
     Info << "Constructing myHeRhoThermo " << endl;
     calculate
@@ -176,15 +162,12 @@ Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::myHeRhoThermo
         this->p_,
         this->T_,
         this->he_,
-        this->speedOfSound_,
+        this->psi_,
         this->rho_,
         this->mu_,
         this->alpha_,
         true                    // Create old time fields
     );
-    Info << "myHeRhoThermo constructed " << endl;
-
-    initialize_ = false;
 }
 
 
@@ -203,7 +186,7 @@ Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::myHeRhoThermo
         this->p_,
         this->T_,
         this->he_,
-        this->speedOfSound_,
+        this->psi_,
         this->rho_,
         this->mu_,
         this->alpha_,
@@ -231,77 +214,14 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::correct()
         this->p_,
         this->T_,
         this->he_,
-        this->speedOfSound_,
+        this->psi_,
         this->rho_,
         this->mu_,
         this->alpha_,
         false           // No need to update old times
     );
 
-
-    Info << "p to be updated " << this->p_ << endl;
-    updateP(this->rho_, this->T_);
-
-    Info << "updated p " << this->p_ << endl;
-
     DebugInFunction << "Finished" << endl;
 }
-
-
-//////////////////////////////////
-
-template<class BasicPsiThermo, class MixtureType>
-void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::updateP(volScalarField& rho, volScalarField& T)
-{
-    scalarField& pCells = this->p_.primitiveFieldRef();
-    scalarField& rhoCells = rho.primitiveFieldRef();
-    scalarField& TCells = T.primitiveFieldRef();
-
-    forAll(pCells, celli)
-    {
-        const typename MixtureType::thermoType& mixture_ =
-            this->cellMixture(celli);   
-    
-        pCells[celli] = mixture_.p(rhoCells[celli], TCells[celli]);
-        Info << "celli " << celli << endl;
-        Info << "rhoCells " << rhoCells[celli] << endl;
-        Info << "TCells " << TCells[celli] << endl;
-    }
-
-
-    volScalarField::Boundary& pBf = this->p_.boundaryFieldRef();
-    volScalarField::Boundary& TBf = T.boundaryFieldRef();
-    volScalarField::Boundary& rhoBf = rho.boundaryFieldRef();
-    
-    forAll(pBf, patchi)
-    {
-        fvPatchScalarField& pp = pBf[patchi];
-        fvPatchScalarField& pT = TBf[patchi];
-        fvPatchScalarField& prho = rhoBf[patchi];
-        
-        if (pT.fixesValue())
-        {
-            forAll(pT, facei)
-            {
-                const typename MixtureType::thermoType& mixture_ =
-                    this->patchFaceMixture(patchi, facei);
-
-                pp[facei] = mixture_.p(prho[facei], pT[facei]);
-                
-            }
-        }
-        else
-        {
-            forAll(pT, facei)
-            {
-                const typename MixtureType::thermoType& mixture_ =
-                    this->patchFaceMixture(patchi, facei);
-                
-                pp[facei] = mixture_.p(prho[facei], pT[facei]);
-            }
-        }
-    }
-}
-
 
 // ************************************************************************* //

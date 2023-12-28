@@ -1,1 +1,0 @@
-../myPureMixture/myPureMixture.C

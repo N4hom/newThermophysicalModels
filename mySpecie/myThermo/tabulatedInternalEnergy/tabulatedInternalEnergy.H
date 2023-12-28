@@ -131,6 +131,19 @@ public:
                 #endif
             }
 
+
+            // Absolute internal energy [J/kg]
+            scalar HErhoT
+            (
+                const Thermo& thermo,
+                const scalar rho,
+                const scalar T
+            ) const
+            {
+                return thermo.eTable().reverseLookupY(T,rho) << endl;
+
+            }
+
             //- Temperature from tabulated internal energy
             //  given an initial temperature T0
             scalar THE

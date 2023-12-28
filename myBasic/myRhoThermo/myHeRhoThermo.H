@@ -63,7 +63,7 @@ class myHeRhoThermo
             const volScalarField& p,
             volScalarField& T,
             volScalarField& he,
-            volScalarField& speedOfSound,
+            volScalarField& psi,
             volScalarField& rho,
             volScalarField& mu,
             volScalarField& alpha,
@@ -72,9 +72,6 @@ class myHeRhoThermo
 
         //- Construct as copy (not implemented)
         myHeRhoThermo(const myHeRhoThermo<BasicPsiThermo, MixtureType>&);
-
-
-        bool initialize_;
 
 
 public:
@@ -110,8 +107,6 @@ public:
 
         //- Update properties
         virtual void correct();
-
-        virtual void updateP(volScalarField& rho, volScalarField& T);
 
         //- Update properties from T
         //virtual void correctT();

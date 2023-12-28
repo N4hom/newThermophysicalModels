@@ -25,16 +25,16 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::myThermo
+    Foam::thermo
 
 Description
     Basic thermodynamics type based on the use of fitting functions for
-    cp, h, s obtained from the template argument type myThermo.  All other
+    cp, h, s obtained from the template argument type thermo.  All other
     properties are derived from these primitive functions.
 
 SourceFiles
-    myThermoI.H
-    myThermo.C
+    thermoI.H
+    thermo.C
 
 \*---------------------------------------------------------------------------*/
 
@@ -48,51 +48,51 @@ using namespace Foam::constant::thermodynamic;
 
 namespace Foam
 {
-namespace species
+namespace mySpecies
 {
 
 // Forward declaration of friend functions and operators
 
-template<class Thermo, template<class> class Type> class myThermo;
+template<class Thermo, template<class> class Type> class thermo;
 
 template<class Thermo, template<class> class Type>
-inline myThermo<Thermo, Type> operator+
+inline thermo<Thermo, Type> operator+
 (
-    const myThermo<Thermo, Type>&,
-    const myThermo<Thermo, Type>&
+    const thermo<Thermo, Type>&,
+    const thermo<Thermo, Type>&
 );
 
 template<class Thermo, template<class> class Type>
-inline myThermo<Thermo, Type> operator*
+inline thermo<Thermo, Type> operator*
 (
     const scalar,
-    const myThermo<Thermo, Type>&
+    const thermo<Thermo, Type>&
 );
 
 template<class Thermo, template<class> class Type>
-inline myThermo<Thermo, Type> operator==
+inline thermo<Thermo, Type> operator==
 (
-    const myThermo<Thermo, Type>&,
-    const myThermo<Thermo, Type>&
+    const thermo<Thermo, Type>&,
+    const thermo<Thermo, Type>&
 );
 
 template<class Thermo, template<class> class Type>
 Ostream& operator<<
 (
     Ostream&,
-    const myThermo<Thermo, Type>&
+    const thermo<Thermo, Type>&
 );
 
 
 /*---------------------------------------------------------------------------*\
-                           Class myThermo Declaration
+                           Class thermo Declaration
 \*---------------------------------------------------------------------------*/
 
 template<class Thermo, template<class> class Type>
-class myThermo
+class thermo
 :
     public Thermo,
-    public Type<myThermo<Thermo, Type>>
+    public Type<thermo<Thermo, Type>>
 {
     // Private data
 
@@ -106,35 +106,35 @@ class myThermo
     // Private Member Functions
 
         //- Return the temperature corresponding to the value of the
-        //  myThermodynamic property f, given the function f = F(p, T)
+        //  thermodynamic property f, given the function f = F(p, T)
         //  and dF(p, T)/dT
         inline scalar T
         (
             scalar f,
             scalar p,
             scalar T0,
-            scalar (myThermo::*F)(const scalar, const scalar) const,
-            scalar (myThermo::*dFdT)(const scalar, const scalar) const,
-            scalar (myThermo::*limit)(const scalar) const
+            scalar (thermo::*F)(const scalar, const scalar) const,
+            scalar (thermo::*dFdT)(const scalar, const scalar) const,
+            scalar (thermo::*limit)(const scalar) const
         ) const;
 
 
 public:
 
-    //- The myThermodynamics of the individual species'
-    typedef myThermo<Thermo, Type> myThermoType;
+    //- The thermodynamics of the individual species'
+    typedef thermo<Thermo, Type> thermoType;
 
 
     // Constructors
 
         //- Construct from components
-        inline myThermo(const Thermo& sp);
+        inline thermo(const Thermo& sp);
 
         //- Construct from dictionary
-        myThermo(const dictionary& dict);
+        thermo(const dictionary& dict);
 
         //- Construct as named copy
-        inline myThermo(const word& name, const myThermo&);
+        inline thermo(const word& name, const thermo&);
 
 
     // Member Functions
@@ -144,7 +144,7 @@ public:
         {
             return
                   Thermo::typeName() + ','
-                + Type<myThermo<Thermo, Type>>::typeName();
+                + Type<thermo<Thermo, Type>>::typeName();
         }
 
         //- Name of Enthalpy/Internal energy
@@ -195,6 +195,9 @@ public:
             //- Enthalpy/Internal energy [J/kg]
             inline scalar HE(const scalar p, const scalar T) const;
 
+            //- Internal energy as a function of (rho,T)
+            inline scalar HErhoT(const scalar rho, const scalar T) const;
+
             //- Gibbs free energy [J/kg]
             inline scalar G(const scalar p, const scalar T) const;
 
@@ -222,6 +225,9 @@ public:
             //- Enthalpy/Internal energy [J/kmol]
             inline scalar he(const scalar p, const scalar T) const;
 
+            //- Internal energy as 
+            inline scalar heRhoT(const scalar rho, const scalar T) const;
+
             //- Heat capacity at constant volume [J/(kmol K)]
             inline scalar cv(const scalar p, const scalar T) const;
 
@@ -238,7 +244,7 @@ public:
             inline scalar a(const scalar p, const scalar T) const;
 
 
-        // Equilibrium reaction myThermodynamics
+        // Equilibrium reaction thermodynamics
 
             //- Equilibrium constant [] i.t.o fugacities
             //  = PIi(fi/Pstd)^nui
@@ -339,28 +345,28 @@ public:
 
     // Member operators
 
-        inline void operator+=(const myThermo&);
+        inline void operator+=(const thermo&);
         inline void operator*=(const scalar);
 
 
     // Friend operators
 
-        friend myThermo operator+ <Thermo, Type>
+        friend thermo operator+ <Thermo, Type>
         (
-            const myThermo&,
-            const myThermo&
+            const thermo&,
+            const thermo&
         );
 
-        friend myThermo operator* <Thermo, Type>
+        friend thermo operator* <Thermo, Type>
         (
             const scalar s,
-            const myThermo&
+            const thermo&
         );
 
-        friend myThermo operator== <Thermo, Type>
+        friend thermo operator== <Thermo, Type>
         (
-            const myThermo&,
-            const myThermo&
+            const thermo&,
+            const thermo&
         );
 
 
@@ -369,7 +375,7 @@ public:
         friend Ostream& operator<< <Thermo, Type>
         (
             Ostream&,
-            const myThermo&
+            const thermo&
         );
 };
 

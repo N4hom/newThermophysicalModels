@@ -168,19 +168,19 @@ public:
         // Fundamental properties
 
             //- Heat capacity at constant volume [J/(kg K)]
-            inline scalar Cv(const scalar p, const scalar T) const;
+            inline scalar Cv(const scalar rho, const scalar e) const;
 
             //- Sensible internal energy [J/kg]
-            inline scalar Es(const scalar p, const scalar T) const;
+            inline scalar Es(const scalar rho, const scalar e) const;
 
             //- Absolute internal energy [J/kg]
-            inline scalar Ea(const scalar p, const scalar T) const;
+            inline scalar Ea(const scalar rho, const scalar e) const;
 
             //- Chemical enthalpy [J/kg]
             inline scalar Hc() const;
 
             //- Entropy [J/(kg K)]
-            inline scalar S(const scalar p, const scalar T) const;
+            inline scalar S(const scalar rho, const scalar e) const;
 
             //- Return table
             inline scalarLookupTable2D eTable() const

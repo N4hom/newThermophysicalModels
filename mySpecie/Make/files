@@ -1,6 +1,4 @@
 myAtomicWeights/myAtomicWeights.C
 mySpecie/mySpecie.C
-/*reaction/reactions/makeReactions.C
-reaction/reactions/makeLangmuirHinshelwoodReactions.C
-*/
-LIB = $(FOAM_USER_LIBBIN)/libmySpecie
+
+LIB = $(FOAM_LIBBIN)/libmySpecie

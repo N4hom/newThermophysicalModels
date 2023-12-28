@@ -29,8 +29,8 @@ License
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
-const Foam::myAtomicWeightTable::myAtomicWeight
-Foam::myAtomicWeightTable::myAtomicWeights[myAtomicWeightTable::nElements] =
+const Foam::myAtomicWeightsTable::myAtomicWeight
+Foam::myAtomicWeightsTable::myAtomicWeights[myAtomicWeightsTable::nElements] =
 {
     {"E",    0},
     {"e",    5.45e-4},
@@ -141,7 +141,7 @@ Foam::myAtomicWeightTable::myAtomicWeights[myAtomicWeightTable::nElements] =
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::myAtomicWeightTable::myAtomicWeightTable()
+Foam::myAtomicWeightsTable::myAtomicWeightsTable()
 {
     for (int i=0; i<nElements; i++)
     {
@@ -152,7 +152,7 @@ Foam::myAtomicWeightTable::myAtomicWeightTable()
 
 // * * * * * * * * * * * * * * * * Global data  * * * * * * * * * * * * * * //
 
-Foam::myAtomicWeightTable Foam::myAtomicWeights;
+Foam::myAtomicWeightsTable Foam::myAtomicWeights;
 
 
 // ************************************************************************* //

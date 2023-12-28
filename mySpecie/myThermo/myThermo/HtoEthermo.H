@@ -28,6 +28,9 @@ inline scalar Es
     #endif
 }
 
+
+
+
 inline scalar Ea
 (
     const scalar p,
@@ -41,4 +44,19 @@ inline scalar Ea
     #else
     return Ha(p, T) - p/EquationOfState::rho(p, T);
     #endif
+}
+
+inline scalar Ea
+(
+    const scalar rho,
+    const scalar T
+) const
+{
+    //#ifdef __clang__
+    // volatile const scalar ha = Ha(p, T);
+    // volatile const scalar rho = EquationOfState::rho(p, T);
+    // return ha - p/rho;
+    //#else
+    return Ha(p, T) - p/EquationOfState::rho(p, T);
+    //#endif
 }

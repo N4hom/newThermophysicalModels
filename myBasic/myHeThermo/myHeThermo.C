@@ -33,9 +33,10 @@ License
 // * * * * * * * * * * * * Protected Member Functions  * * * * * * * * * * * //
 
 template<class BasicThermo, class MixtureType>
-void Foam::myHeThermo<BasicThermo, MixtureType>::heBoundaryCorrection(volScalarField& he)
+void Foam::myHeThermo<BasicThermo, MixtureType>::
+heBoundaryCorrection(volScalarField& h)
 {
-    volScalarField::Boundary& hBf = he.boundaryFieldRef();
+    volScalarField::Boundary& hBf = h.boundaryFieldRef();
 
     forAll(hBf, patchi)
     {
@@ -58,7 +59,50 @@ void Foam::myHeThermo<BasicThermo, MixtureType>::init
 (
     const volScalarField& p,
     const volScalarField& T,
+    volScalarField& he
+)
+{
+    scalarField& heCells = he.primitiveFieldRef();
+    const scalarField& pCells = p.primitiveField();
+    const scalarField& TCells = T.primitiveField();
+
+    forAll(heCells, celli)
+    {
+        heCells[celli] =
+            this->cellMixture(celli).HE(pCells[celli], TCells[celli]);
+        Info << "heCells[celli] " << heCells[celli] << endl;
+    }
+
+    volScalarField::Boundary& heBf = he.boundaryFieldRef();
+
+    forAll(heBf, patchi)
+    {
+        heBf[patchi] == this->he
+        (
+            p.boundaryField()[patchi],
+            T.boundaryField()[patchi],
+            patchi
+        );
+
+        heBf[patchi].useImplicit(T.boundaryField()[patchi].useImplicit());
+    }
+
+    this->heBoundaryCorrection(he);
+
+    // Note: T does not have oldTime
+    if (p.nOldTimes() > 0)
+    {
+        init(p.oldTime(), T.oldTime(), he.oldTime());
+    }
+}
+
+
+template<class BasicThermo, class MixtureType>
+void Foam::myHeThermo<BasicThermo, MixtureType>::initFromRhoT
+(
     const volScalarField& rho,
+    const volScalarField& p,    
+    const volScalarField& T,
     volScalarField& he
 )
 {
@@ -69,7 +113,7 @@ void Foam::myHeThermo<BasicThermo, MixtureType>::init
     forAll(heCells, celli)
     {
         heCells[celli] =
-            this->cellMixture(celli).HE(rhoCells[celli], TCells[celli]);
+            this->cellMixture(celli).HErhoT(rhoCells[celli], TCells[celli]);
         Info << "heCells[celli] " << heCells[celli] << endl;
     }
 
@@ -92,10 +136,9 @@ void Foam::myHeThermo<BasicThermo, MixtureType>::init
     // Note: T does not have oldTime
     if (p.nOldTimes() > 0)
     {
-        init(p.oldTime(), T.oldTime(), rho.oldTime(), he.oldTime());
+        init(p.oldTime(), T.oldTime(), he.oldTime());
     }
 }
-
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
@@ -108,28 +151,10 @@ Foam::myHeThermo<BasicThermo, MixtureType>::myHeThermo
 :
     BasicThermo(mesh, phaseName),
     MixtureType(*this, mesh, phaseName),
-
-    he_
-    (
-        IOobject
-        (
-            BasicThermo::phasePropertyName
-            (
-                MixtureType::thermoType::heName()
-            ),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimEnergy/dimMass,
-        this->heBoundaryTypes(),
-        this->heBoundaryBaseTypes()
-    )
+    he_(this->e_)
 {
     Info << "Initializing internal energy " << endl;
-    init(this->p_, this->T_, this->rho_, he_);
+    init(this->p_, this->T_, he_);
 }
 
 
@@ -143,27 +168,9 @@ Foam::myHeThermo<BasicThermo, MixtureType>::myHeThermo
 :
     BasicThermo(mesh, dict, phaseName),
     MixtureType(*this, mesh, phaseName),
-
-    he_
-    (
-        IOobject
-        (
-            BasicThermo::phasePropertyName
-            (
-                MixtureType::thermoType::heName()
-            ),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimEnergy/dimMass,
-        this->heBoundaryTypes(),
-        this->heBoundaryBaseTypes()
-    )
+    he_(this->e_)
 {
-    init(this->p_, this->T_, this->rho_, he_);
+    init(this->p_, this->T_, he_);
 }
 
 
@@ -177,27 +184,9 @@ Foam::myHeThermo<BasicThermo, MixtureType>::myHeThermo
 :
     BasicThermo(mesh, phaseName, dictionaryName),
     MixtureType(*this, mesh, phaseName),
-
-    he_
-    (
-        IOobject
-        (
-            BasicThermo::phasePropertyName
-            (
-                MixtureType::thermoType::heName()
-            ),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimEnergy/dimMass,
-        this->heBoundaryTypes(),
-        this->heBoundaryBaseTypes()
-    )
+    he_(this->e_)
 {
-    init(this->p_, this->T_, this->rho_, he_);
+    init(this->p_, this->T_, he_);
 }
 
 
@@ -286,6 +275,26 @@ Foam::tmp<Foam::scalarField> Foam::myHeThermo<BasicThermo, MixtureType>::he
 
     return the;
 }
+
+
+// template<class BasicThermo, class MixtureType>
+// Foam::tmp<Foam::scalarField> Foam::myHeThermo<BasicThermo, MixtureType>::he
+// (
+//     const scalarField& rho,
+//     const scalarField& T,
+//     const labelList& cells
+// ) const
+// {
+//     tmp<scalarField> the(new scalarField(T.size()));
+//     scalarField& he = the.ref();
+
+//     forAll(T, celli)
+//     {
+//         he[celli] = this->cellMixture(cells[celli]).HE(p[celli], T[celli]);
+//     }
+
+//     return the;
+// }
 
 
 template<class BasicThermo, class MixtureType>

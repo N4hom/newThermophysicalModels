@@ -1,1 +1,1 @@
-../myEquationOfState/tabulatedThermoEOS/tabulatedEOSI.H
+../myEquationOfState/tabulatedEOS/tabulatedEOSI.H

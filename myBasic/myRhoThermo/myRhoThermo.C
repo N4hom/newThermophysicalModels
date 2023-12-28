@@ -56,6 +56,7 @@ Foam::myRhoThermo::myRhoThermo(const fvMesh& mesh, const word& phaseName)
         mesh,
         dimDensity
     ),
+
     psi_
     (
         IOobject
@@ -69,6 +70,7 @@ Foam::myRhoThermo::myRhoThermo(const fvMesh& mesh, const word& phaseName)
         mesh,
         dimensionSet(0, -2, 2, 0, 0)
     ),
+
     mu_
     (
         IOobject
@@ -81,20 +83,6 @@ Foam::myRhoThermo::myRhoThermo(const fvMesh& mesh, const word& phaseName)
         ),
         mesh,
         dimensionSet(1, -1, -1, 0, 0)
-    ),
-    speedOfSound_
-    (
-        IOobject
-        (
-            phasePropertyName("thermo:speedOfSound"),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimensionSet(0, 1, -1, 0, 0)
-
     )
 {
     Info << "Constructing myRhoThermo " << endl;
@@ -149,20 +137,6 @@ Foam::myRhoThermo::myRhoThermo
         ),
         mesh,
         dimensionSet(1, -1, -1, 0, 0)
-    ),
-    speedOfSound_
-    (
-        IOobject
-        (
-            phasePropertyName("thermo:speedOfSound"),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimensionSet(0, 1, -1, 0, 0)
-
     )
 {}
 
@@ -215,20 +189,6 @@ Foam::myRhoThermo::myRhoThermo
         ),
         mesh,
         dimensionSet(1, -1, -1, 0, 0)
-    ),
-    speedOfSound_
-    (
-        IOobject
-        (
-            phasePropertyName("thermo:speedOfSound"),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimensionSet(0, 1, -1, 0, 0)
-
     )
 {}
 
@@ -277,7 +237,6 @@ Foam::tmp<Foam::scalarField> Foam::myRhoThermo::rho(const label patchi) const
 
 Foam::volScalarField& Foam::myRhoThermo::rho()
 {
-    Info << "rho from myRhoThermo.C " << rho_ << endl;
     return rho_;
 }
 
@@ -317,15 +276,5 @@ Foam::tmp<Foam::scalarField> Foam::myRhoThermo::mu(const label patchi) const
     return mu_.boundaryField()[patchi];
 }
 
-
-Foam::volScalarField& Foam::myRhoThermo::speedOfSound()
-{
-    return speedOfSound_;
-}
-
-const Foam::volScalarField& Foam::myRhoThermo::speedOfSound() const
-{
-    return speedOfSound_;
-}
 
 // ************************************************************************* //

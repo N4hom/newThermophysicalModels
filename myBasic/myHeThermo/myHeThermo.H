@@ -59,8 +59,8 @@ protected:
 
     // Protected data
 
-        //- Energy field
-        volScalarField he_;
+        //- Energy field  (inherited from BasicThermo)
+       volScalarField& he_;
 
 
     // Protected Member Functions
@@ -84,7 +84,15 @@ private:
         (
             const volScalarField& p,
             const volScalarField& T,
+            volScalarField& he
+        );
+
+         //- Initialize myHeThermo
+        void initFromRhoT
+        (
             const volScalarField& rho,
+            const volScalarField& p,
+            const volScalarField& T,
             volScalarField& he
         );
 
@@ -191,6 +199,15 @@ public:
                 const scalarField& T,
                 const labelList& cells
             ) const;
+
+            // //- Enthalpy/Internal energy for cell-set [J/kg]
+            // virtual tmp<scalarField> he
+            // (
+            //     const scalarField& rho,
+            //     const scalarField& T,
+            //     const labelList& cells
+            // ) const;
+            
 
             //- Enthalpy/Internal energy for patch [J/kg]
             virtual tmp<scalarField> he

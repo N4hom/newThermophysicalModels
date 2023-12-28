@@ -92,8 +92,8 @@ inline Foam::scalar Foam::eTabulated<EquationOfState>::limit
 template<class EquationOfState>
 inline Foam::scalar Foam::eTabulated<EquationOfState>::Cv
 (
-    const scalar p,
-    const scalar T
+    const scalar rho,
+    const scalar e
 ) const
 {
     return this->cvTable_.lookup(p,T);
@@ -103,24 +103,24 @@ inline Foam::scalar Foam::eTabulated<EquationOfState>::Cv
 template<class EquationOfState>
 inline Foam::scalar Foam::eTabulated<EquationOfState>::Es
 (
-    const scalar p,
-    const scalar T
+    const scalar rho,
+    const scalar e
 ) const
 {
-    Info << "returned Es " << eTable_.lookup(p,T) << endl;
-    return eTable_.lookup(p,T);
+    Info << "returned Es " << eTable_.lookup(rho,e) << endl;
+    return eTable_.lookup(rho,e);
 }
 
 
 template<class EquationOfState>
 inline Foam::scalar Foam::eTabulated<EquationOfState>::Ea
 (
-    const scalar p,
-    const scalar T
+    const scalar rho,
+    const scalar e
 ) const
 {
-    Info << "Es(p, T) @ " << "p="  << p << " T=" << T << " " << Es(p, T) << endl;
-    return Es(p, T) ;
+    Info << "Es(p, T) @ " << "p="  << p << " T=" << T << " " << Es(rho, e) << endl;
+    return Es(rho, e) ;
 }
 
 
@@ -135,8 +135,8 @@ inline Foam::scalar Foam::eTabulated<EquationOfState>::Hc() const
 template<class EquationOfState>
 inline Foam::scalar Foam::eTabulated<EquationOfState>::S
 (
-    const scalar p,
-    const scalar T
+    const scalar rho,
+    const scalar e
 ) const
 {
     NotImplemented;

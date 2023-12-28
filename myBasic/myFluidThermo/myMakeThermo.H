@@ -25,10 +25,10 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 InClass
-    Foam::myFluidThermo
+    Foam::fluidThermo
 
 Description
-    Macros for creating basic myFluid thermo packages
+    Macros for creating basic fluid thermo packages
 
 \*---------------------------------------------------------------------------*/
 
@@ -45,7 +45,7 @@ Description
     typedef                                                                    \
         Transport                                                              \
         <                                                                      \
-            species::myThermo                                                    \
+            mySpecies::thermo                                                    \
             <                                                                  \
                 Thermo                                                         \
                 <                                                              \

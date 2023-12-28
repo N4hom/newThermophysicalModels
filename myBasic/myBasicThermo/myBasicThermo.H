@@ -141,11 +141,11 @@ protected:
 
         //- Laminar thermal diffusivity [kg/m/s]
         volScalarField alpha_;
-
+        
         //- Internal energy
         volScalarField e_;
 
-        //- Density
+        //- Density field [kg/m^3]
         volScalarField rho_;
 
         //- Heat capacity at constant pressure [J/kg/K]
@@ -154,36 +154,6 @@ protected:
         //- Heat capacity at constant volume [J/kg/K]
         volScalarField Cv_;
 
-        //- Temperature [K]
-        //  Non-const access allowed for transport equations
-        volScalarField& TRef()
-        {
-            return this->T_;
-        }
-
-        //- Return enthalpy/Internal energy [J/kg]
-        volScalarField& heRef()
-        {
-            return e_;
-        }
-
-        //- Heat capacity at constant pressure [J/kg/K]
-        volScalarField& CpRef()
-        {
-            return Cp_;
-        }
-
-        //- Heat capacity at constant volume [J/kg/K]
-        volScalarField& CvRef()
-        {
-            return Cv_;
-        }
-
-        //- Thermal diffusivity for enthalpy of mixture [kg/m/s]
-        volScalarField& alphaRef()
-        {
-            return alpha_;
-        }
 
 
     // Protected Member Functions
@@ -195,6 +165,31 @@ protected:
         //- Return the enthalpy/internal energy field boundary base types
         //- by interrogating the temperature field boundary types
         wordList heBoundaryBaseTypes();
+
+         //- Temperature [K]
+            //  Non-const access allowed for transport equations
+            volScalarField& TRef()
+            {
+                return this->T_;
+            }
+
+            //- Return enthalpy/Internal energy [J/kg]
+            volScalarField& heRef()
+            {
+                return e_;
+            }
+
+            //- Heat capacity at constant pressure [J/kg/K]
+            volScalarField& CpRef()
+            {
+                return Cp_;
+            }
+
+            //- Heat capacity at constant volume [J/kg/K]
+            volScalarField& CvRef()
+            {
+                return Cv_;
+            }
 
         //- No copy construct
         myBasicThermo(const myBasicThermo&) = delete;
@@ -450,8 +445,8 @@ public:
             //- Temperature from enthalpy/internal energy for cell-set
             virtual tmp<scalarField> THE
             (
-                const scalarField& rho,
-                const scalarField& e,
+                const scalarField& h,
+                const scalarField& p,
                 const scalarField& T0,      // starting temperature
                 const labelList& cells
             ) const = 0;
@@ -459,8 +454,8 @@ public:
             //- Temperature from enthalpy/internal energy for patch
             virtual tmp<scalarField> THE
             (
-                const scalarField& rho,
-                const scalarField& e,
+                const scalarField& h,
+                const scalarField& p,
                 const scalarField& T0,      // starting temperature
                 const label patchi
             ) const = 0;

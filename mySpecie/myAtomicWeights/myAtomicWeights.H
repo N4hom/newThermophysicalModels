@@ -24,10 +24,10 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::myAtomicWeightTable
+    Foam::myAtomicWeightsTable
 
 Description
-    A table of myAtomic weights for all the elements
+    A table of atomic weights for all the elements
 
 SourceFiles
     myAtomicWeights.C
@@ -49,7 +49,7 @@ namespace Foam
                            Class myAtomicWeights Declaration
 \*---------------------------------------------------------------------------*/
 
-class myAtomicWeightTable
+class myAtomicWeightsTable
 :
     public HashTable<scalar>
 {
@@ -58,7 +58,7 @@ public:
 
     // Public types and data
 
-        //- Structure to hold the element name and myAtomic weight pair
+        //- Structure to hold the element name and atomic weight pair
         struct myAtomicWeight
         {
             char name[3];
@@ -74,14 +74,14 @@ public:
     // Constructors
 
         //- Construct from myAtomicWeights_
-        myAtomicWeightTable();
+        myAtomicWeightsTable();
 };
 
 
 // * * * * * * * * * * * * * * * * Global data  * * * * * * * * * * * * * * //
 
-// myAtomic weights table for every element in the periodic table
-extern myAtomicWeightTable myAtomicWeights;
+// Atomic weights table for every element in the periodic table
+extern myAtomicWeightsTable myAtomicWeights;
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
