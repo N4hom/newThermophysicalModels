@@ -37,7 +37,7 @@ SourceFiles
 #ifndef myPureMixture_H
 #define myPureMixture_H
 
-#include "basicMixture.H"
+#include "myBasicMixture.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -51,7 +51,7 @@ namespace Foam
 template<class ThermoType>
 class myPureMixture
 :
-    public basicMixture
+    public myBasicMixture
 {
     // Private data
 

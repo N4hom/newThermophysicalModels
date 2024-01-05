@@ -78,39 +78,67 @@ public:
             }
 
             //- Heat capacity at constant volume [J/(kg K)]
+            // scalar Cpv
+            // (
+            //     const Thermo& thermo,
+            //     const scalar p,
+            //     const scalar T
+            // ) const
+            // {
+            //     #ifdef __clang__
+            //     // Using volatile to prevent compiler optimisations leading to
+            //     // a sigfpe
+            //     volatile const scalar cv = thermo.Cv(p, T);
+            //     return cv;
+            //     #else
+            //     return thermo.Cv(p, T);
+            //     #endif
+            // }
+
             scalar Cpv
             (
                 const Thermo& thermo,
-                const scalar p,
+                const scalar rho,
+                const scalar e,
                 const scalar T
             ) const
             {
-                #ifdef __clang__
-                // Using volatile to prevent compiler optimisations leading to
-                // a sigfpe
-                volatile const scalar cv = thermo.Cv(p, T);
-                return cv;
-                #else
-                return thermo.Cv(p, T);
-                #endif
+                
+                return thermo.Cv(rho, e, T);
             }
 
+
+            
+
+
             //- Ratio of specific heats Cp/Cv []
+            // scalar CpByCpv
+            // (
+            //     const Thermo& thermo,
+            //     const scalar p,
+            //     const scalar T
+            // ) const
+            // {
+            //     #ifdef __clang__
+            //     // Using volatile to prevent compiler optimisations leading to
+            //     // a sigfpe
+            //     volatile const scalar gamma = thermo.gamma(p, T);
+            //     return gamma;
+            //     #else
+            //     return thermo.gamma(p, T);
+            //     #endif
+            // }
+
             scalar CpByCpv
             (
                 const Thermo& thermo,
-                const scalar p,
+                const scalar rho,
+                const scalar e,
                 const scalar T
             ) const
             {
-                #ifdef __clang__
-                // Using volatile to prevent compiler optimisations leading to
-                // a sigfpe
-                volatile const scalar gamma = thermo.gamma(p, T);
-                return gamma;
-                #else
-                return thermo.gamma(p, T);
-                #endif
+                
+                return thermo.gamma(rho, e, T);
             }
 
             //- Sensible internal energy [J/kg]
@@ -137,11 +165,12 @@ public:
             scalar HErhoT
             (
                 const Thermo& thermo,
+                const scalar e,
                 const scalar rho,
                 const scalar T
             ) const
             {
-                return thermo.EsRhoT(rho,T);
+                return thermo.EsRhoT(rho, e, T);
             }
 
             //- Temperature from sensible internal energy given an initial
@@ -162,6 +191,36 @@ public:
                 #else
                 return thermo.TEs(e, p, T0);
                 #endif
+            }
+
+            //- Temperature from sensible internal energy given an initial
+            //- temperature T0 [K]
+            scalar TRhoE
+            (
+                const Thermo& thermo,
+                const scalar T,
+                const scalar rho,
+                const scalar e
+            ) const
+            {
+                
+                return thermo.TRhoEs(T, rho, e);
+                
+            }
+
+
+
+            scalar gamma
+            (
+                const Thermo& thermo,
+                const scalar rho,
+                const scalar e,
+                const scalar T
+            ) const
+            {
+                
+                return CpByCpv(thermo, rho, e, T);
+                
             }
 };
 

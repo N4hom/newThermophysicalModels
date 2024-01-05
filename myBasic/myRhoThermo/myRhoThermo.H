@@ -64,7 +64,7 @@ protected:
 
         //- Density field [kg/m^3]
         //  Named 'myRhoThermo' to avoid (potential) conflict with solver density
-        volScalarField rho_;
+        //volScalarField& rho_;
 
         //- Compressibility [s^2/m^2]
         volScalarField psi_;
@@ -72,11 +72,28 @@ protected:
         //- Dynamic viscosity [kg/m/s]
         volScalarField mu_;
 
+        //- Speed of sound [m/s]
+        volScalarField speedOfSound_;
+
 
     // Protected Member Functions
 
         //- Construct as copy (not implemented)
         myRhoThermo(const myRhoThermo&);
+
+        //- Dynamic viscosity of mixture [kg/m/s]
+        volScalarField& muRef()
+        {
+            return mu_;
+        }
+
+        
+        //- Access the speed of sound
+        volScalarField& speedOfSoundRef()
+        {
+            return speedOfSound_;
+        }
+
 
 
 public:
@@ -165,24 +182,29 @@ public:
             virtual tmp<scalarField> rho(const label patchi) const;
 
             //- Return non-const access to the local density field [kg/m^3]
-            virtual volScalarField& rho();
+            //virtual volScalarField& rho();
+
+          
 
             //- Add the given density correction to the density field.
             //  Used to update the density field following pressure solution
             //  Limit thermo rho between rhoMin and rhoMax
-            virtual void correctRho
-            (
-                const volScalarField& deltaRho,
-                const dimensionedScalar& rhoMin,
-                const dimensionedScalar& rhoMax
-            );
+            // virtual void correctRho
+            // (
+            //     const volScalarField& deltaRho,
+            //     const dimensionedScalar& rhoMin,
+            //     const dimensionedScalar& rhoMax
+            // );
 
-            //- Add the given density correction to the density field.
-            //  Used to update the density field following pressure solution
-            virtual void correctRho(const volScalarField& deltaRho);
+            // //- Add the given density correction to the density field.
+            // //  Used to update the density field following pressure solution
+            // virtual void correctRho(const volScalarField& deltaRho);
 
             //- Compressibility [s^2/m^2]
             virtual const volScalarField& psi() const;
+
+
+            virtual volScalarField& speedOfSound();
 
 
         // Access to transport state variables

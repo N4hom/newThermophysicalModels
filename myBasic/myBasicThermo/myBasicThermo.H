@@ -173,11 +173,12 @@ protected:
                 return this->T_;
             }
 
-            //- Return enthalpy/Internal energy [J/kg]
-            volScalarField& heRef()
+
+            volScalarField& pRef()
             {
-                return e_;
+                return this->p_;
             }
+
 
             //- Heat capacity at constant pressure [J/kg/K]
             volScalarField& CpRef()
@@ -191,6 +192,14 @@ protected:
                 return Cv_;
             }
 
+            //- Heat capacity at constant volume [J/kg/K]
+            volScalarField& alphaRef()
+            {
+                return alpha_;
+            }
+
+
+            
         //- No copy construct
         myBasicThermo(const myBasicThermo&) = delete;
 
@@ -291,6 +300,7 @@ public:
 
 
     // Member Functions
+        
 
         static const word dictName;
 
@@ -366,8 +376,11 @@ public:
             const int nExpectedCmpts
         );
 
+
         //- Update properties
         virtual void correct() = 0;
+
+        virtual void correctFromRhoE() = 0;
 
         //- Return the name of the thermo physics
         virtual word thermoName() const = 0;
@@ -395,12 +408,31 @@ public:
 
         // Access to thermodynamic state variables
 
+            //- Return enthalpy/Internal energy [J/kg]
+            
+            volScalarField& eRef()
+            {
+                return this->e_;
+            }
+
+            const volScalarField& e()
+            {
+                return e_;
+            }
+
             //- Pressure [Pa]
             //  Non-const access allowed for transport equations
             virtual volScalarField& p();
 
             //- Pressure [Pa]
             virtual const volScalarField& p() const;
+
+
+            //- Density [kg/m^3]
+            //- Non-const access 
+            virtual volScalarField& getRho();
+
+            //const volScalarField& rhoRef();
 
             //- Density [kg/m^3]
             virtual tmp<volScalarField> rho() const = 0;
@@ -474,17 +506,33 @@ public:
             virtual tmp<volScalarField> Cp() const = 0;
 
             //- Heat capacity at constant pressure for patch [J/kg/K]
+            // virtual tmp<scalarField> Cp
+            // (
+            //     const scalarField& p,
+            //     const scalarField& T,
+            //     const label patchi
+            // ) const = 0;
+
             virtual tmp<scalarField> Cp
             (
-                const scalarField& p,
+                const scalarField& rho,
+                const scalarField& e,
                 const scalarField& T,
                 const label patchi
             ) const = 0;
 
             //- Heat capacity using pressure and temperature [J/kg/K]
+            // virtual tmp<scalarField> Cp
+            // (
+            //     const scalarField& p,
+            //     const scalarField& T,
+            //     const labelList& cells
+            // ) const = 0;
+
             virtual tmp<scalarField> Cp
             (
-                const scalarField& p,
+                const scalarField& rho,
+                const scalarField& e,
                 const scalarField& T,
                 const labelList& cells
             ) const = 0;
@@ -493,9 +541,17 @@ public:
             virtual tmp<volScalarField> Cv() const = 0;
 
             //- Heat capacity at constant volume for patch [J/kg/K]
+            // virtual tmp<scalarField> Cv
+            // (
+            //     const scalarField& p,
+            //     const scalarField& T,
+            //     const label patchi
+            // ) const = 0;
+
             virtual tmp<scalarField> Cv
             (
-                const scalarField& p,
+                const scalarField& rho,
+                const scalarField& e,
                 const scalarField& T,
                 const label patchi
             ) const = 0;
@@ -512,31 +568,60 @@ public:
             virtual tmp<volScalarField> gamma() const = 0;
 
             //- Gamma = Cp/Cv for patch []
+            // virtual tmp<scalarField> gamma
+            // (
+            //     const scalarField& p,
+            //     const scalarField& T,
+            //     const label patchi
+            // ) const = 0;
+
+            //- Gamma = Cp/Cv for patch []
             virtual tmp<scalarField> gamma
             (
-                const scalarField& p,
+                const scalarField& rho,
+                const scalarField& e,
                 const scalarField& T,
                 const label patchi
             ) const = 0;
+
+
 
             //- Heat capacity at constant pressure/volume [J/kg/K]
             virtual tmp<volScalarField> Cpv() const = 0;
 
             //- Heat capacity at constant pressure/volume for patch [J/kg/K]
+            // virtual tmp<scalarField> Cpv
+            // (
+            //     const scalarField& p,
+            //     const scalarField& T,
+            //     const label patchi
+            // ) const = 0;
+
             virtual tmp<scalarField> Cpv
             (
-                const scalarField& p,
+                const scalarField& rho,
+                const scalarField& e,
                 const scalarField& T,
                 const label patchi
             ) const = 0;
+
+            
 
             //- Heat capacity ratio []
             virtual tmp<volScalarField> CpByCpv() const = 0;
 
             //- Heat capacity ratio for patch []
+            // virtual tmp<scalarField> CpByCpv
+            // (
+            //     const scalarField& p,
+            //     const scalarField& T,
+            //     const label patchi
+            // ) const = 0;
+
             virtual tmp<scalarField> CpByCpv
             (
-                const scalarField& p,
+                const scalarField& rho,
+                const scalarField& e,
                 const scalarField& T,
                 const label patchi
             ) const = 0;
@@ -602,6 +687,8 @@ public:
                 const scalarField& alphat,
                 const label patchi
             ) const = 0;
+
+
 
 
         //- Read thermophysical properties dictionary

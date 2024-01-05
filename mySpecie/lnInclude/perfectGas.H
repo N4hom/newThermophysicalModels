@@ -1,1 +1,0 @@
-../myEquationOfState/myPerfectGas/perfectGas.H

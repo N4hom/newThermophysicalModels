@@ -25,17 +25,17 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "perfectGas.H"
+#include "myPerfectGas.H"
 #include "IOstreams.H"
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class Specie>
-Foam::perfectGas<Specie>::perfectGas(const dictionary& dict)
+Foam::myPerfectGas<Specie>::myPerfectGas(const dictionary& dict)
 :
     Specie(dict)
 {
-    Info << "Constructing equationOfState perfectGas " << endl;
+    Info << "Constructing equationOfState myPerfectGas " << endl;
 
 }
 
@@ -43,7 +43,7 @@ Foam::perfectGas<Specie>::perfectGas(const dictionary& dict)
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 template<class Specie>
-void Foam::perfectGas<Specie>::write(Ostream& os) const
+void Foam::myPerfectGas<Specie>::write(Ostream& os) const
 {
     Specie::write(os);
 }
@@ -52,7 +52,7 @@ void Foam::perfectGas<Specie>::write(Ostream& os) const
 // * * * * * * * * * * * * * * * Ostream Operator  * * * * * * * * * * * * * //
 
 template<class Specie>
-Foam::Ostream& Foam::operator<<(Ostream& os, const perfectGas<Specie>& pg)
+Foam::Ostream& Foam::operator<<(Ostream& os, const myPerfectGas<Specie>& pg)
 {
     pg.write(os);
     return os;

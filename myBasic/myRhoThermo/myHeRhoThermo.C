@@ -145,6 +145,101 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
     }
 }
 
+template<class BasicPsiThermo, class MixtureType>
+void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculateFromRhoE()
+{
+    Info << "calculateFromRhoE " << endl;
+    scalarField& eCells = this->heRef().primitiveFieldRef();
+    scalarField& TCells = this->TRef().primitiveFieldRef();
+    scalarField& pCells = this->pRef().primitiveFieldRef();
+    scalarField& CpCells = this->CpRef().primitiveFieldRef();
+    scalarField& CvCells = this->CvRef().primitiveFieldRef();
+    scalarField& speedOfSoundCells = this->speedOfSoundRef().primitiveFieldRef();
+
+    const typename MixtureType::thermoType& mixture_ =
+            this->cellMixture(0);
+
+    Info << "mixture_.Cp(this->rho_[0], eCells[0], TCells[0]) " << mixture_.Cp(this->rho_[0], eCells[0], TCells[0])  << endl;
+
+
+    forAll(this->rho_, celli)
+    {
+        const typename MixtureType::thermoType& mixture_ =
+            this->cellMixture(celli);
+
+        const scalar& rhoi(this->rho_[celli]);
+        //Info << "scalar& rhoi(this->rho_[celli]) " << rhoi << endl;
+        scalar& ei(eCells[celli]);
+        scalar& Ti(TCells[celli]);
+
+        TCells[celli] = mixture_.TRhoE(Ti, rhoi, ei);
+
+       
+
+        scalar pi = mixture_.p(rhoi, ei, Ti);
+        //Info << "calculated pi  " << pi << endl; 
+        scalar Cpi = mixture_.Cp(rhoi, ei, Ti);
+        scalar Cvi = mixture_.Cv(rhoi, ei, Ti);
+
+        pCells[celli] = pi;
+        CpCells[celli] = Cpi;
+        CvCells[celli] = Cvi;
+
+        speedOfSoundCells[celli] = sqrt(max(mixture_.cSqr(rhoi, ei, Ti, Cvi), SMALL));
+    }
+
+     this->TRef().correctBoundaryConditions();
+     this->pRef().correctBoundaryConditions();
+     this->eRef().correctBoundaryConditions();
+     // this->eRef().correctBoundaryConditions(); gives a runtime error due to an error during lookup
+
+
+
+    volScalarField::Boundary& be  = this->eRef().boundaryFieldRef();   
+    volScalarField::Boundary& bCp = this->CpRef().boundaryFieldRef();
+    volScalarField::Boundary& bCv = this->CvRef().boundaryFieldRef();
+    volScalarField::Boundary& bmu = this->muRef().boundaryFieldRef();
+    volScalarField::Boundary& balpha = this->alphaRef().boundaryFieldRef();
+    volScalarField::Boundary& bspeedOfSound =
+        this->speedOfSoundRef().boundaryFieldRef();
+
+    forAll(this->rho_.boundaryField(), patchi)
+    {
+
+        const fvPatchScalarField& prho = this->rho_.boundaryField()[patchi];
+        const fvPatchScalarField& pT = this->TRef().boundaryField()[patchi];
+        const fvPatchScalarField& phe = this->heRef().boundaryField()[patchi];
+        const fvPatchScalarField& pp = this->pRef().boundaryField()[patchi];
+
+        fvPatchScalarField& pCp = bCp[patchi];
+        fvPatchScalarField& pCv = bCv[patchi];
+        fvPatchScalarField& pmu = bmu[patchi];
+        fvPatchScalarField& palpha = balpha[patchi];
+        fvPatchScalarField& pspeedOfSound = bspeedOfSound[patchi];
+
+        forAll(prho, facei)
+        {
+            const typename MixtureType::thermoType& mixture_ =
+                        this->patchFaceMixture(patchi, facei);
+
+            const scalar rhoi(prho[facei]);
+            const scalar ei(phe[facei]);
+            const scalar Ti(pT[facei]);
+
+            const scalar Cpi = mixture_.Cp(rhoi, ei, Ti);
+            const scalar Cvi = mixture_.Cv(rhoi, ei, Ti);
+            pCp[facei] = Cpi;
+            pCv[facei] = Cvi;
+            //pmu[facei] = mixture_.mu(rhoi, ei, Ti);
+            //palpha[facei] = mixture_.kappa(rhoi, ei, Ti)/Cpi;
+            pspeedOfSound[facei] =
+                sqrt(max(mixture_.cSqr(rhoi, ei, Ti, Cvi), SMALL));
+        }
+    }
+
+    Info << "End of calculateFromRhoE " << endl;
+}
+
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class BasicPsiThermo, class MixtureType>
@@ -157,17 +252,24 @@ Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::myHeRhoThermo
     myHeThermo<BasicPsiThermo, MixtureType>(mesh, phaseName)
 {
     Info << "Constructing myHeRhoThermo " << endl;
-    calculate
-    (
-        this->p_,
-        this->T_,
-        this->he_,
-        this->psi_,
-        this->rho_,
-        this->mu_,
-        this->alpha_,
-        true                    // Create old time fields
-    );
+
+    Info << this->name() << endl;
+    
+    calculateFromRhoE();
+
+    // calculate
+    // (
+    //     this->p_,
+    //     this->T_,
+    //     this->he_,
+    //     this->psi_,
+    //     this->rho_,
+    //     this->mu_,
+    //     this->alpha_,
+    //     true                    // Create old time fields
+    // );
+
+    Info << "myHeRhoThermo constructed" << endl;
 }
 
 
@@ -181,17 +283,19 @@ Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::myHeRhoThermo
 :
     myHeThermo<BasicPsiThermo, MixtureType>(mesh, phaseName, dictName)
 {
-    calculate
-    (
-        this->p_,
-        this->T_,
-        this->he_,
-        this->psi_,
-        this->rho_,
-        this->mu_,
-        this->alpha_,
-        true                    // Create old time fields
-    );
+    calculateFromRhoE();
+
+    // calculate
+    // (
+    //     this->p_,
+    //     this->T_,
+    //     this->he_,
+    //     this->psi_,
+    //     this->rho_,
+    //     this->mu_,
+    //     this->alpha_,
+    //     true                    // Create old time fields
+    // );
 }
 
 
@@ -224,4 +328,11 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::correct()
     DebugInFunction << "Finished" << endl;
 }
 
+template<class BasicPsiThermo, class MixtureType>
+void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::correctFromRhoE()
+{
+
+    calculateFromRhoE();
+
+}
 // ************************************************************************* //

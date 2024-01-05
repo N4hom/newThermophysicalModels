@@ -102,20 +102,38 @@ class thermo
         //- Max number of iterations in energy->temperature inversion functions
         static const int maxIter_;
 
+        static const scalar relTol_;
+
+        static const scalar absTol_;
+
 
     // Private Member Functions
 
         //- Return the temperature corresponding to the value of the
         //  thermodynamic property f, given the function f = F(p, T)
         //  and dF(p, T)/dT
-        inline scalar T
+        // inline scalar T
+        // (
+        //     scalar f,
+        //     scalar p,
+        //     scalar T0,
+        //     scalar (thermo::*F)(const scalar, const scalar) const,
+        //     scalar (thermo::*dFdT)(const scalar, const scalar) const,
+        //     scalar (thermo::*limit)(const scalar) const
+        // ) const;
+
+
+        inline scalar TFromRhoE
         (
-            scalar f,
-            scalar p,
-            scalar T0,
-            scalar (thermo::*F)(const scalar, const scalar) const,
-            scalar (thermo::*dFdT)(const scalar, const scalar) const,
-            scalar (thermo::*limit)(const scalar) const
+            const scalar f,
+            const scalar e,
+            const scalar rho,
+            const scalar T0,
+            scalar (thermo<Thermo, Type>::*F)(const scalar rho, const scalar e, const scalar T0) const,
+            scalar (thermo<Thermo, Type>::*dFdT)(const scalar rho, const scalar e, const scalar T0) 
+            const,
+            scalar (thermo<Thermo, Type>::*limit)(const scalar T0) const,
+            const bool diagnostics = false
         ) const;
 
 
@@ -181,22 +199,33 @@ public:
 
         // Mass specific derived properties
 
+            // This class calculate the specific heat based on the runtime 
+            // selectable class defining the thermo type (e.g. "sensibleInternalEnergy", "absoluteEnthalpy" etc.)
+            //inline scalar Cp(const scalar rho, const scalar e, const scalar T) const;
+
+            //inline scalar Cv(const scalar rho, const scalar e, const scalar T) const;
 
             //- Heat capacity at constant pressure/volume [J/(kg K)]
-            inline scalar Cpv(const scalar p, const scalar T) const;
+            //inline scalar Cpv(const scalar p, const scalar T) const;
+            inline scalar Cpv(const scalar rho, const scalar e, const scalar T) const;
 
             //- Gamma = Cp/Cv []
-            inline scalar gamma(const scalar p, const scalar T) const;
+            //inline scalar gamma(const scalar p, const scalar T) const;
+
+            inline scalar gamma(const scalar rho, const scalar e ,const scalar T) const;
 
             //- Ratio of heat capacity at constant pressure to that at
             //  constant pressure/volume []
-            inline scalar CpByCpv(const scalar p, const scalar T) const;
+            //inline scalar CpByCpv(const scalar p, const scalar T) const;
+            inline scalar CpByCpv(const scalar rho, const scalar e, const scalar T) const;
 
             //- Enthalpy/Internal energy [J/kg]
             inline scalar HE(const scalar p, const scalar T) const;
 
             //- Internal energy as a function of (rho,T)
-            inline scalar HErhoT(const scalar rho, const scalar T) const;
+            inline scalar HErhoT(const scalar rho, const scalar e, const scalar T) const;
+
+            inline scalar TRhoEs(const scalar T, const scalar rho ,const scalar es) const;
 
             //- Gibbs free energy [J/kg]
             inline scalar G(const scalar p, const scalar T) const;
@@ -290,6 +319,13 @@ public:
                 const scalar H,
                 const scalar p,
                 const scalar T0
+            ) const;
+
+            inline scalar TRhoE
+            (
+                const scalar T,
+                const scalar rho,
+                const scalar e
             ) const;
 
             //- Temperature from sensible enthalpy given an initial T0

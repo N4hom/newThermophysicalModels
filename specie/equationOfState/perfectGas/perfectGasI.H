@@ -119,6 +119,7 @@ inline Foam::scalar Foam::perfectGas<Specie>::S(scalar p, scalar T) const
 template<class Specie>
 inline Foam::scalar Foam::perfectGas<Specie>::psi(scalar p, scalar T) const
 {
+    Info << "R " << this->R() << endl;
     return 1.0/(this->R()*T);
 }
 

@@ -24,7 +24,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::perfectGas
+    Foam::myPerfectGas
 
 Group
     grpSpecieEquationOfState
@@ -33,13 +33,13 @@ Description
     Perfect gas equation of state.
 
 SourceFiles
-    perfectGasI.H
-    perfectGas.C
+    myPerfectGasI.H
+    myPerfectGas.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef perfectGas_H
-#define perfectGas_H
+#ifndef myPerfectGas_H
+#define myPerfectGas_H
 
 #include "autoPtr.H"
 
@@ -50,43 +50,43 @@ namespace Foam
 
 // Forward declaration of friend functions and operators
 
-template<class Specie> class perfectGas;
+template<class Specie> class myPerfectGas;
 
 template<class Specie>
-inline perfectGas<Specie> operator+
+inline myPerfectGas<Specie> operator+
 (
-    const perfectGas<Specie>&,
-    const perfectGas<Specie>&
+    const myPerfectGas<Specie>&,
+    const myPerfectGas<Specie>&
 );
 
 template<class Specie>
-inline perfectGas<Specie> operator*
+inline myPerfectGas<Specie> operator*
 (
     const scalar,
-    const perfectGas<Specie>&
+    const myPerfectGas<Specie>&
 );
 
 template<class Specie>
-inline perfectGas<Specie> operator==
+inline myPerfectGas<Specie> operator==
 (
-    const perfectGas<Specie>&,
-    const perfectGas<Specie>&
+    const myPerfectGas<Specie>&,
+    const myPerfectGas<Specie>&
 );
 
 template<class Specie>
 Ostream& operator<<
 (
     Ostream&,
-    const perfectGas<Specie>&
+    const myPerfectGas<Specie>&
 );
 
 
 /*---------------------------------------------------------------------------*\
-                           Class perfectGas Declaration
+                           Class myPerfectGas Declaration
 \*---------------------------------------------------------------------------*/
 
 template<class Specie>
-class perfectGas
+class myPerfectGas
 :
     public Specie
 {
@@ -96,19 +96,19 @@ public:
     // Constructors
 
         //- Construct from components
-        inline perfectGas(const Specie& sp);
+        inline myPerfectGas(const Specie& sp);
 
         //- Construct from dictionary
-        perfectGas(const dictionary& dict);
+        myPerfectGas(const dictionary& dict);
 
         //- Construct as named copy
-        inline perfectGas(const word& name, const perfectGas&);
+        inline myPerfectGas(const word& name, const myPerfectGas&);
 
         //- Construct and return a clone
-        inline autoPtr<perfectGas> clone() const;
+        inline autoPtr<myPerfectGas> clone() const;
 
         // Selector from dictionary
-        inline static autoPtr<perfectGas> New(const dictionary& dict);
+        inline static autoPtr<myPerfectGas> New(const dictionary& dict);
 
 
     // Member functions
@@ -116,7 +116,7 @@ public:
         //- Return the instantiated type name
         static word typeName()
         {
-            return "perfectGas<" + word(Specie::typeName_()) + '>';
+            return "myPerfectGas<" + word(Specie::typeName_()) + '>';
         }
 
 
@@ -128,8 +128,16 @@ public:
             //- Is the equation of state is isochoric i.e. rho = const
             static const bool isochoric = false;
 
-            //- Return density [kg/m^3]
+            //- Return density [kg/m^3] - Not needed anymore as the density is now the independent variable
             inline scalar rho(scalar p, scalar T) const;
+
+            //- Return pressure []
+            inline scalar p(scalar rho, scalar e, scalar T) const;
+
+            //- Return speed of sound []
+            inline scalar cSqr(scalar rho, scalar e, scalar T, scalar cv) const;
+
+            inline scalar gamma(const scalar rho, const scalar e, const scalar T, const scalar cv) const;
 
             //- Return enthalpy departure [J/kg]
             inline scalar H(const scalar p, const scalar T) const;
@@ -164,28 +172,28 @@ public:
 
     // Member operators
 
-        inline void operator+=(const perfectGas&);
+        inline void operator+=(const myPerfectGas&);
         inline void operator*=(const scalar);
 
 
     // Friend operators
 
-        friend perfectGas operator+ <Specie>
+        friend myPerfectGas operator+ <Specie>
         (
-            const perfectGas&,
-            const perfectGas&
+            const myPerfectGas&,
+            const myPerfectGas&
         );
 
-        friend perfectGas operator* <Specie>
+        friend myPerfectGas operator* <Specie>
         (
             const scalar s,
-            const perfectGas&
+            const myPerfectGas&
         );
 
-        friend perfectGas operator== <Specie>
+        friend myPerfectGas operator== <Specie>
         (
-            const perfectGas&,
-            const perfectGas&
+            const myPerfectGas&,
+            const myPerfectGas&
         );
 
 
@@ -194,7 +202,7 @@ public:
         friend Ostream& operator<< <Specie>
         (
             Ostream&,
-            const perfectGas&
+            const myPerfectGas&
         );
 };
 
@@ -205,10 +213,10 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-#include "perfectGasI.H"
+#include "myPerfectGasI.H"
 
 #ifdef NoRepository
-    #include "perfectGas.C"
+    #include "myPerfectGas.C"
 #endif
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

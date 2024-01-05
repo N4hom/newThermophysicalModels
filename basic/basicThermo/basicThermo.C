@@ -413,6 +413,7 @@ Foam::basicThermo::basicThermo
         dimensionedScalar(dimensionSet(1, -1, -1, 0, 0), Zero)
     )
 {
+    Info << "Constructing basicThermo " << endl;
     this->readIfPresent("updateT", TOwner_);  // Manual override
 
     if (debug)

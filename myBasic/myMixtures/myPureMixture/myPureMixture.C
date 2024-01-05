@@ -38,7 +38,7 @@ Foam::myPureMixture<ThermoType>::myPureMixture
     const word& phaseName
 )
 :
-    basicMixture(thermoDict, mesh, phaseName),
+    myBasicMixture(thermoDict, mesh, phaseName),
     mixture_(thermoDict.subDict("mixture"))
 {
     Info <<"Constructing myPureMixture " << endl;

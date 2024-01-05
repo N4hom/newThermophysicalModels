@@ -43,19 +43,19 @@ namespace Foam
 Foam::myRhoThermo::myRhoThermo(const fvMesh& mesh, const word& phaseName)
 :
     myFluidThermo(mesh, phaseName),
-    rho_
-    (
-        IOobject
-        (
-            phasePropertyName("thermo:rho"),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimDensity
-    ),
+    // rho_
+    // (
+    //     IOobject
+    //     (
+    //         phasePropertyName("thermo:rho"),
+    //         mesh.time().timeName(),
+    //         mesh,
+    //         IOobject::NO_READ,
+    //         IOobject::NO_WRITE
+    //     ),
+    //     mesh,
+    //     dimDensity
+    // ),
 
     psi_
     (
@@ -83,6 +83,17 @@ Foam::myRhoThermo::myRhoThermo(const fvMesh& mesh, const word& phaseName)
         ),
         mesh,
         dimensionSet(1, -1, -1, 0, 0)
+    ),
+    speedOfSound_
+    (
+        IOobject
+        (
+            phasePropertyName("thermo:speedOfSound", phaseName),
+            mesh.time().timeName(),
+            mesh
+        ),
+        mesh,
+        dimensionedScalar(dimVelocity, 0.0)
     )
 {
     Info << "Constructing myRhoThermo " << endl;
@@ -97,19 +108,19 @@ Foam::myRhoThermo::myRhoThermo
 )
 :
     myFluidThermo(mesh, dict, phaseName),
-    rho_
-    (
-        IOobject
-        (
-            phasePropertyName("thermo:rho"),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimDensity
-    ),
+    // rho_
+    // (
+    //     IOobject
+    //     (
+    //         phasePropertyName("thermo:rho"),
+    //         mesh.time().timeName(),
+    //         mesh,
+    //         IOobject::NO_READ,
+    //         IOobject::NO_WRITE
+    //     ),
+    //     mesh,
+    //     dimDensity
+    // ),
 
     psi_
     (
@@ -137,6 +148,17 @@ Foam::myRhoThermo::myRhoThermo
         ),
         mesh,
         dimensionSet(1, -1, -1, 0, 0)
+    ),
+    speedOfSound_
+    (
+        IOobject
+        (
+            phasePropertyName("thermo:speedOfSound", phaseName),
+            mesh.time().timeName(),
+            mesh
+        ),
+        mesh,
+        dimensionedScalar(dimVelocity, 0.0)
     )
 {}
 
@@ -149,19 +171,19 @@ Foam::myRhoThermo::myRhoThermo
 )
 :
     myFluidThermo(mesh, phaseName, dictionaryName),
-    rho_
-    (
-        IOobject
-        (
-            phasePropertyName("thermo:rho"),
-            mesh.time().timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::NO_WRITE
-        ),
-        mesh,
-        dimDensity
-    ),
+    // rho_
+    // (
+    //     IOobject
+    //     (
+    //         phasePropertyName("thermo:rho"),
+    //         mesh.time().timeName(),
+    //         mesh,
+    //         IOobject::NO_READ,
+    //         IOobject::NO_WRITE
+    //     ),
+    //     mesh,
+    //     dimDensity
+    // ),
 
     psi_
     (
@@ -189,6 +211,17 @@ Foam::myRhoThermo::myRhoThermo
         ),
         mesh,
         dimensionSet(1, -1, -1, 0, 0)
+    ),
+    speedOfSound_
+    (
+        IOobject
+        (
+            phasePropertyName("thermo:speedOfSound", phaseName),
+            mesh.time().timeName(),
+            mesh
+        ),
+        mesh,   // hardcoded velocity for testing
+        dimensionedScalar(dimVelocity, 344.0)
     )
 {}
 
@@ -225,38 +258,41 @@ Foam::myRhoThermo::~myRhoThermo()
 
 Foam::tmp<Foam::volScalarField> Foam::myRhoThermo::rho() const
 {
-    return rho_;
+    return this->rho_;
 }
 
 
 Foam::tmp<Foam::scalarField> Foam::myRhoThermo::rho(const label patchi) const
 {
-    return rho_.boundaryField()[patchi];
+    return this->rho_.boundaryField()[patchi];
 }
 
 
-Foam::volScalarField& Foam::myRhoThermo::rho()
-{
-    return rho_;
-}
+// Foam::volScalarField& Foam::myRhoThermo::rho()
+// {
+//     return this->rho_;
+// }
 
 
-void Foam::myRhoThermo::correctRho
-(
-    const Foam::volScalarField& deltaRho,
-    const dimensionedScalar& rhoMin,
-    const dimensionedScalar& rhoMax
-)
-{
-    rho_ += deltaRho;
-    rho_ = max(rho_, rhoMin);
-    rho_ = min(rho_, rhoMax);
-}
 
-void Foam::myRhoThermo::correctRho(const Foam::volScalarField& deltaRho)
-{
-    rho_ += deltaRho;
-}
+
+
+// void Foam::myRhoThermo::correctRho
+// (
+//     const Foam::volScalarField& deltaRho,
+//     const dimensionedScalar& rhoMin,
+//     const dimensionedScalar& rhoMax
+// )
+// {
+//     rho_ += deltaRho;
+//     rho_ = max(rho_, rhoMin);
+//     rho_ = min(rho_, rhoMax);
+// }
+
+// void Foam::myRhoThermo::correctRho(const Foam::volScalarField& deltaRho)
+// {
+//     rho_ += deltaRho;
+// }
 
 
 const Foam::volScalarField& Foam::myRhoThermo::psi() const
@@ -264,6 +300,10 @@ const Foam::volScalarField& Foam::myRhoThermo::psi() const
     return psi_;
 }
 
+Foam::volScalarField& Foam::myRhoThermo::speedOfSound() 
+{
+    return speedOfSound_;
+}
 
 Foam::tmp<Foam::volScalarField> Foam::myRhoThermo::mu() const
 {

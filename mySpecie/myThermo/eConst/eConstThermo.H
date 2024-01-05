@@ -153,14 +153,22 @@ public:
 
         // Fundamental properties
 
-            //- Heat capacity at constant volume [J/(kg K)]
-            inline scalar Cv(const scalar p, const scalar T) const;
+            //- Heat capacity at constant volume [J/(kg K)]   
+            // (commenting out so that Cv(rho,e,T) can be implemented)
+            //inline scalar Cv(const scalar p, const scalar T) const;
+
+            inline scalar Cv(const scalar rho, const scalar e, const scalar T) const;
+
+            inline scalar Cp(const scalar rho, const scalar e, const scalar T) const;
+
+            inline scalar gamma(const scalar rho, const scalar e, const scalar T) const;
+
 
             //- Sensible internal energy [J/kg]
             inline scalar Es(const scalar p, const scalar T) const;
 
             //- Sensible internal energy [J/kg]
-            inline scalar EsRhoT(const scalar rho, const scalar T) const;
+            inline scalar EsRhoT(const scalar rho, const scalar e ,const scalar T) const;
 
             //- Absolute internal energy [J/kg]
             inline scalar Ea(const scalar p, const scalar T) const;

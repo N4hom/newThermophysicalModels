@@ -146,6 +146,13 @@ public:
             //- Return density [kg/m^3]
             inline scalar rho(scalar p, scalar T) const;
 
+
+            //- Return pressure from lookup table
+            inline scalar p(scalar rho, scalar e, scalar T) const;
+
+            //- Return speed of sound from lookup table
+            inline scalar cSqr(scalar rho, scalar e, scalar T) const;
+
             //- Return enthalpy departure [J/kg]
             inline scalar H(const scalar p, const scalar T) const;
 

@@ -190,6 +190,7 @@ Foam::wordList Foam::myBasicThermo::heBoundaryBaseTypes()
             hbt[patchi] = pf.interfaceFieldType();
         }
     }
+    Info << "hbt " << hbt << endl;
 
     return hbt;
 }
@@ -228,6 +229,8 @@ Foam::wordList Foam::myBasicThermo::heBoundaryTypes()
             hbt[patchi] = energyJumpAMIFvPatchScalarField::typeName;
         }
     }
+
+    Info << "hbt = " << hbt << endl;
 
     return hbt;
 }
@@ -321,7 +324,7 @@ Foam::myBasicThermo::myBasicThermo
         (
             myBasicThermo::phasePropertyName
             (
-                "e", phaseName
+                "thermo:e", phaseName
             ),
             mesh.time().timeName(),
             mesh,
@@ -330,8 +333,7 @@ Foam::myBasicThermo::myBasicThermo
         ),
         mesh,
         dimensionedScalar(dimEnergy/dimMass, 0.0),
-        this->heBoundaryTypes(),
-        this->heBoundaryBaseTypes()
+        zeroGradientFvPatchScalarField::typeName
     ),
     rho_
     (
@@ -340,17 +342,19 @@ Foam::myBasicThermo::myBasicThermo
             IOobject::groupName("rho", phaseName),
             mesh.time().timeName(),
             mesh,
-            IOobject::READ_IF_PRESENT,
+            IOobject::MUST_READ,
             IOobject::AUTO_WRITE
         ),
-        mesh,
-        dimDensity
+        mesh
+        // boundary condition doesn't need to
+        // be defined if MUST_READ?
+        // same for dimension?
     ),
     Cp_
     (
         IOobject
         (
-            IOobject::groupName("Cp", phaseName),
+            IOobject::groupName("thermo:Cp", phaseName),
             mesh.time().timeName(),
             mesh
         ),
@@ -361,7 +365,7 @@ Foam::myBasicThermo::myBasicThermo
     (
         IOobject
         (
-            IOobject::groupName("Cv", phaseName),
+            IOobject::groupName("thermo:Cv", phaseName),
             mesh.time().timeName(),
             mesh
         ),
@@ -372,7 +376,15 @@ Foam::myBasicThermo::myBasicThermo
     Info << "Reading dictionary named " << this->name() << endl;
     Info << "Constructing myBasicThermo " << endl;
 
+    Info << "pressure in myBasicThermo " << endl;
+    Info << "p_[0] " << p_[0] << endl; 
+    Info << "rho_ " << rho_ << endl;
+    
     this->readIfPresent("updateT", TOwner_);  // Manual override
+
+
+    // correctBoundaryConditions doesn't work 
+    //e_.correctBoundaryConditions();
 
 }
 
@@ -444,11 +456,12 @@ Foam::myBasicThermo::myBasicThermo
             IOobject::groupName("rho", phaseName),
             mesh.time().timeName(),
             mesh,
-            IOobject::READ_IF_PRESENT,
+            IOobject::MUST_READ,
             IOobject::AUTO_WRITE
         ),
         mesh,
-        dimDensity
+        dimensionedScalar(dimDensity, 0.0)     // boundary condition doesn't need to
+                                               // be defined if MUST_READ?
     ),
     Cp_
     (
@@ -543,11 +556,12 @@ Foam::myBasicThermo::myBasicThermo
             IOobject::groupName("rho", phaseName),
             mesh.time().timeName(),
             mesh,
-            IOobject::READ_IF_PRESENT,
+            IOobject::MUST_READ,
             IOobject::AUTO_WRITE
         ),
         mesh,
-        dimDensity
+        dimensionedScalar(dimDensity, 0.0)     // boundary condition doesn't need to
+                                               // be defined if MUST_READ?
     ),
     Cp_
     (
@@ -572,6 +586,7 @@ Foam::myBasicThermo::myBasicThermo
         dimensionedScalar(dimEnergy/dimMass/dimTemperature, Zero)
     )
 {
+   
     this->readIfPresent("updateT", TOwner_);  // Manual override
 
     if (debug)
@@ -776,9 +791,9 @@ Foam::wordList Foam::myBasicThermo::splitThermoName
 
 Foam::volScalarField& Foam::myBasicThermo::p()
 {
-    Info << "returning p from myBasicThermo" << p_ << endl;
+    Info << "returning p from myBasicThermo" << this->p_ << endl;
 
-    return p_;
+    return this->p_;
 }
 
 
@@ -787,6 +802,19 @@ const Foam::volScalarField& Foam::myBasicThermo::p() const
     return p_;
 }
 
+
+Foam::volScalarField& Foam::myBasicThermo::getRho()
+{
+    Info << "returning rho from myBasicThermo" << this->rho_ << endl;
+
+    return this->rho_;
+}
+
+// const Foam::volScalarField& Foam::myBasicThermo::rhoRef() const
+// {
+
+//     return rho_;
+// }
 
 const Foam::volScalarField& Foam::myBasicThermo::T() const
 {
@@ -810,6 +838,7 @@ const Foam::scalarField& Foam::myBasicThermo::alpha(const label patchi) const
 {
     return alpha_.boundaryField()[patchi];
 }
+
 
 
 bool Foam::myBasicThermo::read()

@@ -36,6 +36,13 @@ template<class Thermo, template<class> class Type>
 const int Foam::mySpecies::thermo<Thermo, Type>::maxIter_ = 100;
 
 
+// Needed by TFromRhoE 
+template<class Thermo, template<class> class Type>
+const Foam::scalar Foam::mySpecies::thermo<Thermo, Type>::relTol_ = 1.0e-4;
+
+template<class Thermo, template<class> class Type>
+const Foam::scalar Foam::mySpecies::thermo<Thermo, Type>::absTol_ = 1.0e-2;
+
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class Thermo, template<class> class Type>

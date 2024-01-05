@@ -90,7 +90,7 @@ inline Foam::scalar Foam::eConstThermo<EquationOfState>::limit
 }
 
 
-template<class EquationOfState>
+/*template<class EquationOfState>
 inline Foam::scalar Foam::eConstThermo<EquationOfState>::Cv
 (
     const scalar p,
@@ -98,6 +98,45 @@ inline Foam::scalar Foam::eConstThermo<EquationOfState>::Cv
 ) const
 {
     return Cv_ + EquationOfState::Cv(p, T);
+}*/
+
+template<class EquationOfState>
+inline Foam::scalar Foam::eConstThermo<EquationOfState>::Cv
+(
+    const scalar rho,
+    const scalar e,
+    const scalar T
+) const
+{
+    return Cv_;
+}
+
+template<class EquationOfState>
+inline Foam::scalar Foam::eConstThermo<EquationOfState>::Cp
+(
+    const scalar rho,
+    const scalar e,
+    const scalar T
+) const
+{
+    // Just for testing
+    //Info << "Cp in eConstThermo " << endl;
+
+    
+    
+    return Cv(rho, e, T) * EquationOfState::gamma(rho, e, T, Cv(rho, e, T)); 
+}
+
+template<class EquationOfState>
+inline Foam::scalar Foam::eConstThermo<EquationOfState>::gamma
+(
+    const scalar rho,
+    const scalar e,
+    const scalar T
+) const
+{
+    Info << "gamma " << EquationOfState::gamma(rho, e, T, Cv(rho, e, T));
+    return EquationOfState::gamma(rho, e, T, Cv(rho, e, T)); 
 }
 
 
@@ -115,9 +154,11 @@ template<class EquationOfState>
 inline Foam::scalar Foam::eConstThermo<EquationOfState>::EsRhoT
 (
     const scalar rho,
+    const scalar e,
     const scalar T
 ) const
 {
+    //Info << "EsRhoT " << endl;    
     return Cv_*(T - Tref_) + Esref_ ;
 }
 

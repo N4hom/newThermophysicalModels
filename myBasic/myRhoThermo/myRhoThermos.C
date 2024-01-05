@@ -30,7 +30,7 @@ License
 #include "myMakeThermo.H"
 
 #include "mySpecie.H"
-#include "perfectGas.H"
+#include "myPerfectGas.H"
 //#include "tabulatedThermoEOS.H"
 
 #include "eConstThermo.H"
@@ -41,7 +41,7 @@ License
 #include "myConstTransport.H"
 
 #include "myHeRhoThermo.H"
-#include "pureMixture.H"
+#include "myPureMixture.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -54,11 +54,11 @@ makeThermos
 (
     myRhoThermo,
     myHeRhoThermo,
-    pureMixture,
+    myPureMixture,
     myConstTransport,
     sensibleInternalEnergy,
     eConstThermo,
-    perfectGas,
+    myPerfectGas,
     mySpecie
 );
 

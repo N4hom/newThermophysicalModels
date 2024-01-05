@@ -25,7 +25,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "perfectGas.H"
+#include "myPerfectGas.H"
 #include "thermodynamicConstants.H"
 
 using namespace Foam::constant::thermodynamic;
@@ -33,7 +33,7 @@ using namespace Foam::constant::thermodynamic;
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
 template<class Specie>
-inline Foam::perfectGas<Specie>::perfectGas(const Specie& sp)
+inline Foam::myPerfectGas<Specie>::myPerfectGas(const Specie& sp)
 :
     Specie(sp)
 {}
@@ -42,10 +42,10 @@ inline Foam::perfectGas<Specie>::perfectGas(const Specie& sp)
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class Specie>
-inline Foam::perfectGas<Specie>::perfectGas
+inline Foam::myPerfectGas<Specie>::myPerfectGas
 (
     const word& name,
-    const perfectGas<Specie>& pg
+    const myPerfectGas<Specie>& pg
 )
 :
     Specie(name, pg)
@@ -53,35 +53,60 @@ inline Foam::perfectGas<Specie>::perfectGas
 
 
 template<class Specie>
-inline Foam::autoPtr<Foam::perfectGas<Specie>>
-Foam::perfectGas<Specie>::clone() const
+inline Foam::autoPtr<Foam::myPerfectGas<Specie>>
+Foam::myPerfectGas<Specie>::clone() const
 {
-    return autoPtr<perfectGas<Specie>>::New(*this);
+    return autoPtr<myPerfectGas<Specie>>::New(*this);
 }
 
 
 template<class Specie>
-inline Foam::autoPtr<Foam::perfectGas<Specie>> Foam::perfectGas<Specie>::New
+inline Foam::autoPtr<Foam::myPerfectGas<Specie>> Foam::myPerfectGas<Specie>::New
 (
     const dictionary& dict
 )
 {
-    return autoPtr<perfectGas<Specie>>::New(dict);
+    return autoPtr<myPerfectGas<Specie>>::New(dict);
 }
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 template<class Specie>
-inline Foam::scalar Foam::perfectGas<Specie>::rho(scalar p, scalar T) const
+inline Foam::scalar Foam::myPerfectGas<Specie>::rho(scalar p, scalar T) const
 {
    
     return p/(this->R()*T);
 }
 
+template<class Specie>
+inline Foam::scalar Foam::myPerfectGas<Specie>::p(scalar rho , scalar e, scalar T) const
+{
+    
+    return rho * this->R() * T;
+}
 
 template<class Specie>
-inline Foam::scalar Foam::perfectGas<Specie>::H(scalar p, scalar T) const
+inline Foam::scalar Foam::myPerfectGas<Specie>::cSqr(scalar rho , scalar e, scalar T, scalar cv) const
+{
+    // hardcoded for now
+
+    // scalar gamma(gamma(rho, e, T, cv));
+    // Info << "gamma = " << gamma;
+
+    // Info << "gamma(rho, e, T, cv) \n" << gamma(rho, e, T, cv) << endl;
+    // Info << "R \n" << this->R() << endl;
+    // Info << "T \n" << T << endl;
+
+    Info << "here " << endl;
+    Info << "gamma(rho, e, T, cv) " << gamma(rho, e, T, cv)<< endl;
+
+    return gamma(rho, e, T, cv) * this->R() * T;
+}
+
+
+template<class Specie>
+inline Foam::scalar Foam::myPerfectGas<Specie>::H(scalar p, scalar T) const
 {
     
     return 0;
@@ -89,49 +114,57 @@ inline Foam::scalar Foam::perfectGas<Specie>::H(scalar p, scalar T) const
 
 
 template<class Specie>
-inline Foam::scalar Foam::perfectGas<Specie>::Cp(scalar p, scalar T) const
+inline Foam::scalar Foam::myPerfectGas<Specie>::Cp(scalar p, scalar T) const
 {
     return 0;
 }
 
 
 template<class Specie>
-inline Foam::scalar Foam::perfectGas<Specie>::E(scalar p, scalar T) const
+inline Foam::scalar Foam::myPerfectGas<Specie>::E(scalar p, scalar T) const
 {
     return 0;
 }
 
 
 template<class Specie>
-inline Foam::scalar Foam::perfectGas<Specie>::Cv(scalar p, scalar T) const
+inline Foam::scalar Foam::myPerfectGas<Specie>::Cv(scalar p, scalar T) const
 {
     return 0;
 }
 
 
 template<class Specie>
-inline Foam::scalar Foam::perfectGas<Specie>::S(scalar p, scalar T) const
+Foam::scalar Foam::myPerfectGas<Specie>::gamma(const scalar rho, const scalar e, const scalar T, const scalar cv) const
+{
+
+    return this->R()/cv + 1.0;
+}
+
+
+template<class Specie>
+inline Foam::scalar Foam::myPerfectGas<Specie>::S(scalar p, scalar T) const
 {
     return -this->R()*log(p/Pstd);
 }
 
 
 template<class Specie>
-inline Foam::scalar Foam::perfectGas<Specie>::psi(scalar p, scalar T) const
+inline Foam::scalar Foam::myPerfectGas<Specie>::psi(scalar p, scalar T) const
 {
     return 1.0/(this->R()*T);
 }
 
 
 template<class Specie>
-inline Foam::scalar Foam::perfectGas<Specie>::Z(scalar p, scalar T) const
+inline Foam::scalar Foam::myPerfectGas<Specie>::Z(scalar p, scalar T) const
 {
     return 1;
 }
 
 
 template<class Specie>
-inline Foam::scalar Foam::perfectGas<Specie>::CpMCv(scalar p, scalar T) const
+inline Foam::scalar Foam::myPerfectGas<Specie>::CpMCv(scalar p, scalar T) const
 {
     return this->R();
 }
@@ -140,14 +173,14 @@ inline Foam::scalar Foam::perfectGas<Specie>::CpMCv(scalar p, scalar T) const
 // * * * * * * * * * * * * * * * Member Operators  * * * * * * * * * * * * * //
 
 template<class Specie>
-inline void Foam::perfectGas<Specie>::operator+=(const perfectGas<Specie>& pg)
+inline void Foam::myPerfectGas<Specie>::operator+=(const myPerfectGas<Specie>& pg)
 {
     Specie::operator+=(pg);
 }
 
 
 template<class Specie>
-inline void Foam::perfectGas<Specie>::operator*=(const scalar s)
+inline void Foam::myPerfectGas<Specie>::operator*=(const scalar s)
 {
     Specie::operator*=(s);
 }
@@ -156,13 +189,13 @@ inline void Foam::perfectGas<Specie>::operator*=(const scalar s)
 // * * * * * * * * * * * * * * * Friend Operators  * * * * * * * * * * * * * //
 
 template<class Specie>
-inline Foam::perfectGas<Specie> Foam::operator+
+inline Foam::myPerfectGas<Specie> Foam::operator+
 (
-    const perfectGas<Specie>& pg1,
-    const perfectGas<Specie>& pg2
+    const myPerfectGas<Specie>& pg1,
+    const myPerfectGas<Specie>& pg2
 )
 {
-    return perfectGas<Specie>
+    return myPerfectGas<Specie>
     (
         static_cast<const Specie&>(pg1) + static_cast<const Specie&>(pg2)
     );
@@ -170,24 +203,24 @@ inline Foam::perfectGas<Specie> Foam::operator+
 
 
 template<class Specie>
-inline Foam::perfectGas<Specie> Foam::operator*
+inline Foam::myPerfectGas<Specie> Foam::operator*
 (
     const scalar s,
-    const perfectGas<Specie>& pg
+    const myPerfectGas<Specie>& pg
 )
 {
-    return perfectGas<Specie>(s*static_cast<const Specie&>(pg));
+    return myPerfectGas<Specie>(s*static_cast<const Specie&>(pg));
 }
 
 
 template<class Specie>
-inline Foam::perfectGas<Specie> Foam::operator==
+inline Foam::myPerfectGas<Specie> Foam::operator==
 (
-    const perfectGas<Specie>& pg1,
-    const perfectGas<Specie>& pg2
+    const myPerfectGas<Specie>& pg1,
+    const myPerfectGas<Specie>& pg2
 )
 {
-    return perfectGas<Specie>
+    return myPerfectGas<Specie>
     (
         static_cast<const Specie&>(pg1) == static_cast<const Specie&>(pg2)
     );

@@ -72,13 +72,19 @@ inline Foam::autoPtr<Foam::tabulatedThermoEOS<Specie>> Foam::tabulatedThermoEOS<
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-template<class Specie>
-inline Foam::scalar Foam::tabulatedThermoEOS<Specie>::rho(scalar p, scalar T) const
-{
-    Info << "Density from lookup " << rhoTable_.lookup(p,T) << endl;
-    return rhoTable_.lookup(p,T);
-}
+// template<class Specie>
+// inline Foam::scalar Foam::tabulatedThermoEOS<Specie>::rho(scalar p, scalar T) const
+// {
+//     Info << "Density from lookup " << rhoTable_.lookup(p,T) << endl;
+//     return rhoTable_.lookup(p,T);
+// }
 
+template<class Specie>
+inline Foam::scalar Foam::tabulatedThermoEOS<Specie>::p(scalar rho, scalar e, scalar T) const
+{
+    Info << "Density from lookup " << pTable_.lookup(rho, e) << endl;
+    return pTable_.lookup(rho, e);
+}
 
 template<class Specie>
 inline Foam::scalar Foam::tabulatedThermoEOS<Specie>::H(scalar p, scalar T) const

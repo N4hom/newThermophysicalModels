@@ -70,6 +70,9 @@ class myHeRhoThermo
             const bool doOldTimes
         );
 
+        //- Calculate the thermo variables
+        void calculateFromRhoE();
+
         //- Construct as copy (not implemented)
         myHeRhoThermo(const myHeRhoThermo<BasicPsiThermo, MixtureType>&);
 
@@ -108,6 +111,8 @@ public:
         //- Update properties
         virtual void correct();
 
+
+        virtual void correctFromRhoE();
         //- Update properties from T
         //virtual void correctT();
 };
