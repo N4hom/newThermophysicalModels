@@ -34,12 +34,12 @@ License
 template<class EquationOfState>
 Foam::eTabulated<EquationOfState>::eTabulated(const dictionary& dict)
 :
-    EquationOfState(dict),
+    EquationOfState(dict)
     /*Cv_(dict.subDict("thermodynamics").get<scalar>("Cv")),
     Hf_(dict.subDict("thermodynamics").get<scalar>("Hf")),
     Tref_(dict.subDict("thermodynamics").getOrDefault<scalar>("Tref", Tstd)),
     Esref_(dict.subDict("thermodynamics").getOrDefault<scalar>("Eref", 0)),*/
-    eTable_(dict.subDict("thermodynamics"), "p", "T", "e")
+    //eTable_(dict.subDict("thermodynamics"), "p", "T", "e")
 {
     Info << "Constructing eTabulated " << endl;
 }

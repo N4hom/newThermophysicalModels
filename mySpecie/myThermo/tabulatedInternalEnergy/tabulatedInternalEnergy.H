@@ -77,43 +77,53 @@ public:
                 return "ea";
             }
 
-            // Heat capacity at constant volume [J/(kg K)]
             scalar Cpv
             (
                 const Thermo& thermo,
-                const scalar p,
+                const scalar rho,
+                const scalar e,
                 const scalar T
             ) const
             {
-                #ifdef __clang__
-                // Using volatile to prevent compiler optimisations leading to
-                // a sigfpe
-                volatile const scalar cv = thermo.Cv(p, T);
-                return cv;
-                #else
-                return thermo.Cv(p, T);
-                #endif
+                Info << "Cpv " << thermo.Cv(rho, e, T) << endl;
+                return thermo.Cv(rho, e, T);
             }
 
-            //- Cp/Cv []
+
+            
+
+
+            //- Ratio of specific heats Cp/Cv []
+            // scalar CpByCpv
+            // (
+            //     const Thermo& thermo,
+            //     const scalar p,
+            //     const scalar T
+            // ) const
+            // {
+            //     #ifdef __clang__
+            //     // Using volatile to prevent compiler optimisations leading to
+            //     // a sigfpe
+            //     volatile const scalar gamma = thermo.gamma(p, T);
+            //     return gamma;
+            //     #else
+            //     return thermo.gamma(p, T);
+            //     #endif
+            // }
+
             scalar CpByCpv
             (
                 const Thermo& thermo,
-                const scalar p,
+                const scalar rho,
+                const scalar e,
                 const scalar T
             ) const
             {
-                #ifdef __clang__
-                // Using volatile to prevent compiler optimisations leading to
-                // a sigfpe
-                volatile const scalar gamma = thermo.gamma(p, T);
-                return gamma;
-                #else
-                return thermo.gamma(p, T);
-                #endif
+                
+                return thermo.gamma(rho, e, T);
             }
 
-            // Absolute internal energy [J/kg]
+            //- Sensible internal energy [J/kg]
             scalar HE
             (
                 const Thermo& thermo,
@@ -124,28 +134,31 @@ public:
                 #ifdef __clang__
                 // Using volatile to prevent compiler optimisations leading to
                 // a sigfpe
-                volatile const scalar ea = thermo.Ea(p, T);
-                return ea;
+                volatile const scalar es = thermo.Es(p, T);
+                return es;
                 #else
-                return thermo.Ea(p, T);
+                return thermo.Es(p, T);
                 #endif
             }
 
 
-            // Absolute internal energy [J/kg]
+
+             //- Sensible internal energy (rho,T) [J/kg]
             scalar HErhoT
             (
                 const Thermo& thermo,
                 const scalar rho,
+                const scalar e,
                 const scalar T
             ) const
             {
-                return thermo.eTable().reverseLookupY(T,rho) << endl;
-
+                Info << "In HErhoT " << endl;
+                Info << "rho = " << rho << endl;
+                return thermo.EsRhoT(rho, e, T);
             }
 
-            //- Temperature from tabulated internal energy
-            //  given an initial temperature T0
+            //- Temperature from sensible internal energy given an initial
+            //- temperature T0 [K]
             scalar THE
             (
                 const Thermo& thermo,
@@ -154,20 +167,44 @@ public:
                 const scalar T0
             ) const
             {
-                Info << "Here " << endl;
-
-                const scalar& energy(e);
-                Info << "Internal energy " << energy << endl;
-                Info <<" Temperature = " <<  thermo.eTable().reverseLookupY(energy,p) << endl;
                 #ifdef __clang__
                 // Using volatile to prevent compiler optimisations leading to
                 // a sigfpe
-                volatile const scalar tea = thermo.TEa(e, p, T0);
-                return tea;
+                volatile const scalar tes = thermo.TEs(e, p, T0);
+                return tes;
                 #else
-
-                return thermo.eTable().reverseLookupY(energy,p);
+                return thermo.TEs(e, p, T0);
                 #endif
+            }
+
+            //- Temperature from sensible internal energy given an initial
+            //- temperature T0 [K]
+            scalar TRhoE
+            (
+                const Thermo& thermo,
+                const scalar T,
+                const scalar rho,
+                const scalar e
+            ) const
+            {
+                
+                return thermo.tabulatedTRhoEs(rho, e, T);
+                
+            }
+
+
+
+            scalar gamma
+            (
+                const Thermo& thermo,
+                const scalar rho,
+                const scalar e,
+                const scalar T
+            ) const
+            {
+                
+                return CpByCpv(thermo, rho, e, T);
+                
             }
 };
 

@@ -172,16 +172,21 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculateFromRhoE()
         scalar& ei(eCells[celli]);
         scalar& Ti(TCells[celli]);
 
-        TCells[celli] = mixture_.TRhoE(Ti, rhoi, ei);
+        if (!initialize_)
+        {
+            Info << "ei " << ei << endl;
+            TCells[celli] = mixture_.TRhoE(Ti, rhoi, ei);
+            Info << "Ti " << TCells[celli] << endl;
+            scalar pi = mixture_.p(rhoi, ei, Ti);
+            pCells[celli] = pi;
+        }
 
        
 
-        scalar pi = mixture_.p(rhoi, ei, Ti);
         //Info << "calculated pi  " << pi << endl; 
         scalar Cpi = mixture_.Cp(rhoi, ei, Ti);
         scalar Cvi = mixture_.Cv(rhoi, ei, Ti);
 
-        pCells[celli] = pi;
         CpCells[celli] = Cpi;
         CvCells[celli] = Cvi;
 
@@ -249,7 +254,8 @@ Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::myHeRhoThermo
     const word& phaseName
 )
 :
-    myHeThermo<BasicPsiThermo, MixtureType>(mesh, phaseName)
+    myHeThermo<BasicPsiThermo, MixtureType>(mesh, phaseName),
+    initialize_(false)
 {
     Info << "Constructing myHeRhoThermo " << endl;
 
@@ -270,6 +276,8 @@ Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::myHeRhoThermo
     // );
 
     Info << "myHeRhoThermo constructed" << endl;
+    Info << "initialize_ false " <<  endl;
+    initialize_ = false;
 }
 
 

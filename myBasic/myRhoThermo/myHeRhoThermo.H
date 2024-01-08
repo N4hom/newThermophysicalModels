@@ -55,6 +55,9 @@ class myHeRhoThermo
 :
     public myHeThermo<BasicPsiThermo, MixtureType>
 {
+    // Private data
+
+    bool initialize_;
     // Private Member Functions
 
         //- Calculate the thermo variables

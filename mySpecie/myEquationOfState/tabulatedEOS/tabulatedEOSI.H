@@ -73,47 +73,49 @@ inline Foam::autoPtr<Foam::tabulatedEOS<Specie>> Foam::tabulatedEOS<Specie>::New
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 template<class Specie>
-inline Foam::scalar Foam::tabulatedEOS<Specie>::rho(scalar p, scalar T) const
+Foam::scalar Foam::tabulatedEOS<Specie>::p(const scalar rho, const scalar e, const scalar T) const
 {
-    Info << "Density from lookup " << rhoTable_.lookup(p,T) << endl;
-    return rhoTable_.lookup(p,T);
+    return pTable_.lookup(rho, e);
 }
 
 
 template<class Specie>
 inline Foam::scalar Foam::tabulatedEOS<Specie>::H(scalar p, scalar T) const
 {
-    
-    return eTable_.lookup(p,T) + p/rhoTable_.lookup(p,T);
+    NotImplemented;
+    return 0;
 }
 
 
 template<class Specie>
-inline Foam::scalar Foam::tabulatedEOS<Specie>::Cp(scalar p, scalar T) const
+inline Foam::scalar Foam::tabulatedEOS<Specie>::Cp(scalar rho, scalar e, scalar T) const
 {
-    return cpTable_.lookup(p,T);
+    NotImplemented;
+    return 0;
 }
 
+template<class Specie>
+inline Foam::scalar Foam::tabulatedEOS<Specie>::Cv(scalar rho, scalar e, scalar T) const
+{
+    NotImplemented;
+    return 0;
+}
 
 template<class Specie>
 inline Foam::scalar Foam::tabulatedEOS<Specie>::E(scalar p, scalar T) const
 {
-    return eTable_.lookup(p,T);
-}
-
-
-template<class Specie>
-inline Foam::scalar Foam::tabulatedEOS<Specie>::Cv(scalar p, scalar T) const
-{
-    return cvTable_.lookup(p,T);
-}
-
-
-template<class Specie>
-inline Foam::scalar Foam::tabulatedEOS<Specie>::S(scalar p, scalar T) const
-{
     NotImplemented;
     return 0;
+}
+
+
+
+
+template<class Specie>
+inline Foam::scalar Foam::tabulatedEOS<Specie>::S(scalar rho, scalar e, scalar T) const
+{
+    return 1.0/max(TTable_.dFdY(rho, e), SMALL);
+   
 }
 
 
@@ -128,61 +130,96 @@ inline Foam::scalar Foam::tabulatedEOS<Specie>::psi(scalar p, scalar T) const
 template<class Specie>
 inline Foam::scalar Foam::tabulatedEOS<Specie>::Z(scalar p, scalar T) const
 {
-    return p/rho(p,T)/this->R()/T;
+    NotImplemented;
+    return 0;
 }
 
 
 template<class Specie>
-inline Foam::scalar Foam::tabulatedEOS<Specie>::CpMCv(scalar p, scalar T) const
+inline Foam::scalar Foam::tabulatedEOS<Specie>::CpMCv(scalar rho, scalar e, scalar T) const
 {
-    return Cp(p,T) - Cv(p,T);
+    return dpdT(rho, e, T)/max(rho, 1e-10);
 }
 
 
 
 //////////////////////////////
 
+
 template<class Specie>
-Foam::scalar Foam::tabulatedEOS<Specie>::cSqr
+Foam::scalar Foam::tabulatedEOS<Specie>::dpde
 (
-    const scalar p,
+    const scalar rho,
+    const scalar e,
     const scalar T
 ) const
 {
-    return cSqrTable_.lookup(p,T);
+    return pTable_.dFdY(rho, e);
+}
+
+template<class Specie>
+Foam::scalar Foam::tabulatedEOS<Specie>::gamma
+(
+    const scalar rho,
+    const scalar e,
+    const scalar T,
+    const scalar cv
+) const
+{
+    return max(dpdT(rho, e, T)/(cv*max(rho, 1e-10)), SMALL) + 1.0;
 }
 
 template<class Specie>
 Foam::scalar Foam::tabulatedEOS<Specie>::cSqr
 (
     const scalar rho,
-    const scalar e
+    const scalar e,
+    const scalar T,
+    const scalar cv
 ) const
 {
-    return pTable_.dFdX(rho, e) + Gamma(rho, e, T)*p/max(rho, 1e-10);
+    return
+        (sqr(dpdT(rho, e, T))*T/cv - dpdv(rho, e, T))
+       /sqr(max(rho, 1e-10));
 }
 
+
+
 template<class Specie>
-Foam::scalar Foam::tabulatedEOS<Specie>::p
+Foam::scalar Foam::tabulatedEOS<Specie>::dpdv
 (
     const scalar rho,
+    const scalar e,
     const scalar T
 ) const
 {
-    Info << "reverse lookup in rhoTable_ " << endl;
-    return rhoTable_.reverseLookupX(rho, T);
+    return -sqr(rho)*pTable_.dFdX(rho, e);
 }
 
+
 template<class Specie>
-Foam::scalar Foam::tabulatedEOS<Specie>::p
+Foam::scalar Foam::tabulatedEOS<Specie>::dpdT
 (
     const scalar rho,
-    const scalar e
+    const scalar e,
+    const scalar T
 ) const
 {
-    Info << "Lookup in pTable_ " << endl;
-    return pTable_.lookup(rho, e);
+    scalar dTdRho(TTable_.dFdX(rho, e));
+    scalar dTde(TTable_.dFdY(rho, e));
+    scalar dpdt = 0;
+
+    if (mag(dTdRho) > SMALL)
+    {
+        dpdt += pTable_.dFdX(rho, e)/dTdRho;
+    }
+    if (mag(dTde) > SMALL)
+    {
+        dpdt += pTable_.dFdY(rho, e)/dTde;
+    }
+    return dpdt;
 }
+
 
 
 

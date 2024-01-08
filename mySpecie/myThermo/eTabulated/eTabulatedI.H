@@ -30,16 +30,10 @@ License
 template<class EquationOfState>
 inline Foam::eTabulated<EquationOfState>::eTabulated
 (
-    const EquationOfState& st,
-    const scalarLookupTable2D& cvTable,
-    const scalarLookupTable2D& eTable,
-    const scalar Hf
+    const EquationOfState& st
 )
 :
-    EquationOfState(st),
-    eTable_(eTable),
-    Tlow_(min(this->cvTable_.x())),
-    Thigh_(max(this->cvTable_.x()))
+    EquationOfState(st)
 {}
 
 
@@ -90,25 +84,57 @@ inline Foam::scalar Foam::eTabulated<EquationOfState>::limit
 
 
 template<class EquationOfState>
-inline Foam::scalar Foam::eTabulated<EquationOfState>::Cv
+Foam::scalar Foam::eTabulated<EquationOfState>::Cv
 (
     const scalar rho,
-    const scalar e
+    const scalar e,
+    const scalar T
 ) const
 {
-    return this->cvTable_.lookup(p,T);
+    return 1.0/max(this->TTable_.dFdY(rho, e), SMALL);
+}
+
+
+template<class EquationOfState>
+Foam::scalar Foam::eTabulated<EquationOfState>::Cp
+(
+    const scalar rho,
+    const scalar e,
+    const scalar T
+) const
+{
+    const scalar cv = Cv(rho, e, T);
+    return CpMCv(rho, e, T) + cv;
 }
 
 
 template<class EquationOfState>
 inline Foam::scalar Foam::eTabulated<EquationOfState>::Es
 (
-    const scalar rho,
-    const scalar e
+    const scalar p,
+    const scalar T
 ) const
 {
-    Info << "returned Es " << eTable_.lookup(rho,e) << endl;
-    return eTable_.lookup(rho,e);
+    //Info << "returned Es " << eTable_.lookup(rho,T) << endl;
+
+    //return this->TTable_.reverseLookupY(T, rho);
+
+    return 0;
+}
+
+
+template<class EquationOfState>
+inline Foam::scalar Foam::eTabulated<EquationOfState>::EsRhoT
+(
+    const scalar rho,
+    const scalar e,
+    const scalar T
+) const
+{
+    //Info << "returned Es " << eTable_.lookup(rho,T) << endl;
+    Info << "reverseLookupY(T, rho),  rho = " << rho << endl;
+    Info << "T = " << T << endl; 
+    return this->TTable_.reverseLookupY(T, rho);
 }
 
 
@@ -116,11 +142,44 @@ template<class EquationOfState>
 inline Foam::scalar Foam::eTabulated<EquationOfState>::Ea
 (
     const scalar rho,
-    const scalar e
+    const scalar e,
+    const scalar T
 ) const
 {
-    Info << "Es(p, T) @ " << "p="  << p << " T=" << T << " " << Es(rho, e) << endl;
-    return Es(rho, e) ;
+    return this->TTable_.reverseLookupY(T, rho);
+}
+
+
+template<class EquationOfState>
+inline Foam::scalar Foam::eTabulated<EquationOfState>::tabulatedTRhoEs
+(
+    const scalar rho,
+    const scalar e,
+    const scalar T
+) const
+{
+    Info << "rho " << rho << endl;
+    Info << "e " << e << endl;
+    Info << "T " << this->TTable_.lookup(rho, e) << endl;
+    return this->TTable_.lookup(rho, e);
+}
+
+template<class EquationOfState>
+inline Foam::scalar Foam::eTabulated<EquationOfState>::gamma
+(
+    const scalar rho,
+    const scalar e,
+    const scalar T
+) const
+{
+    Info << "gamma " << EquationOfState::gamma(rho, e, T, Cv(rho, e, T));
+    return EquationOfState::gamma(rho, e, T, Cv(rho, e, T)); 
+}
+
+template<class EquationOfState>
+inline Foam::scalar Foam::eTabulated<EquationOfState>::CpMCv(scalar rho, scalar e, scalar T) const
+{
+    return EquationOfState::dpdT(rho, e, T)/max(rho, 1e-10);
 }
 
 

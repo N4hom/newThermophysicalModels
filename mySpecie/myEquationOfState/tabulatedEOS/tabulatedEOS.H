@@ -91,12 +91,12 @@ class tabulatedEOS
 :
     public Specie
 {
-
+protected:
     // Density lookup table
     scalarLookupTable2D pTable_;
 
     // Internal energy lookup table
-    scalarLookupTable2D eTable_;
+    scalarLookupTable2D TTable_;
 
 /*protected:
     scalarLookupTable2D cvTable_;
@@ -148,25 +148,24 @@ public:
 
 
             //- Return pressure from lookup table
-            inline scalar p(scalar rho, scalar e, scalar T) const;
+            inline scalar p(const scalar rho, const scalar e, const scalar T) const;
 
             //- Return speed of sound from lookup table
-            inline scalar cSqr(scalar rho, scalar e, scalar T) const;
+            inline scalar cSqr(const scalar rho, const scalar e, const scalar T, const scalar cv) const;
 
             //- Return enthalpy departure [J/kg]
             inline scalar H(const scalar p, const scalar T) const;
 
             //- Return Cp departure [J/(kg K]
-            inline scalar Cp(scalar p, scalar T) const;
+            inline scalar Cp(const scalar rho, const scalar e, const scalar T) const;
+
+            inline scalar Cv(const scalar rho, const scalar e, const scalar T) const;
 
             //- Return internal energy departure [J/kg]
             inline scalar E(const scalar p, const scalar T) const;
 
-            //- Return Cv departure [J/(kg K]
-            inline scalar Cv(scalar p, scalar T) const;
-
             //- Return entropy [J/(kg K)]
-            inline scalar S(const scalar p, const scalar T) const;
+            inline scalar S(const scalar rho, const scalar e, const scalar T) const;
 
             //- Return compressibility rho/p [s^2/m^2]
             inline scalar psi(scalar p, scalar T) const;
@@ -175,31 +174,26 @@ public:
             inline scalar Z(scalar p, scalar T) const;
 
             //- Return (Cp - Cv) [J/(kg K]
-            inline scalar CpMCv(scalar p, scalar T) const;
+            inline scalar CpMCv(const scalar rho, const scalar e, scalar T) const;
 
+            inline scalar gamma(const scalar rho, const scalar e, const scalar T, const scalar cv) const;
 
-            /////////////////////////////////////
-            //- Return speed of sound
-            inline scalar cSqr
-            (
-                const scalar p,
-                const scalar T
-            ) const;
+            //- Return derivative of pressure w.r.t. Temperature
+            inline scalar dpdT( const scalar rho, const scalar e, const scalar T) const;
 
-            inline scalar cSqr
-            (
-                const scalar rho,
-                const scalar e
-            ) const;
+            //- Return derivative of pressure w.r.t. internal energy
+            inline scalar dpde( const scalar rho, const scalar e, const scalar T) const;
 
-            //- Return pressure
-            inline scalar p
+            //- Return derivative of pressure w.r.t. specific volume
+            inline scalar dpdv
             (
                 const scalar rho,
+                const scalar e,
                 const scalar T
             ) const;
+            
+            
 
-            inline scalar p(rho, e) const;
 
         // IO
 

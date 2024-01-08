@@ -31,12 +31,13 @@ License
 
 #include "mySpecie.H"
 #include "myPerfectGas.H"
-//#include "tabulatedThermoEOS.H"
+#include "tabulatedEOS.H"
 
 #include "eConstThermo.H"
 #include "sensibleInternalEnergy.H"
+#include "tabulatedInternalEnergy.H"
 #include "myThermo.H"
-//#include "eTabulated.H"
+#include "eTabulated.H"
 
 #include "myConstTransport.H"
 
@@ -59,6 +60,18 @@ makeThermos
     sensibleInternalEnergy,
     eConstThermo,
     myPerfectGas,
+    mySpecie
+);
+
+makeThermos
+(
+    myRhoThermo,
+    myHeRhoThermo,
+    myPureMixture,
+    myConstTransport,
+    tabulatedInternalEnergy,
+    eTabulated,
+    tabulatedEOS,
     mySpecie
 );
 

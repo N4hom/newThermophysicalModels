@@ -111,13 +111,13 @@ class eTabulated
         /////////////////
         //- cvTable_ is inherited from <EquationOfState>
        //scalarLookupTable2D cvTable_;
-protected:
+//protected:
 
-        scalarLookupTable2D eTable_;
+        // scalarLookupTable2D TTable_;
 
-        //- Temperature bounds
-        scalar Tlow_;
-        scalar Thigh_;
+        // //- Temperature bounds
+        // scalar Tlow_;
+        // scalar Thigh_;
 
         //- Heat of formation
         //scalar Hf_;
@@ -129,10 +129,10 @@ private:
         //- Construct from components
         inline eTabulated
         (
-            const EquationOfState& st,
-            const scalarLookupTable2D& cvTable,
-            const scalarLookupTable2D& eTable,
-            const scalar Hf
+            const EquationOfState& st
+            // const scalarLookupTable2D& cvTable,
+            // const scalarLookupTable2D& eTable,
+            // const scalar Hf
         );
 
 
@@ -168,13 +168,25 @@ public:
         // Fundamental properties
 
             //- Heat capacity at constant volume [J/(kg K)]
-            inline scalar Cv(const scalar rho, const scalar e) const;
+            inline scalar Cv(const scalar rho, const scalar e, const scalar T) const;
+
+            inline scalar Cp(const scalar rho, const scalar e, const scalar T) const;
 
             //- Sensible internal energy [J/kg]
-            inline scalar Es(const scalar rho, const scalar e) const;
+            inline scalar Es(const scalar p, const scalar T) const;
 
             //- Absolute internal energy [J/kg]
-            inline scalar Ea(const scalar rho, const scalar e) const;
+            inline scalar Ea(const scalar rho, const scalar e, const scalar T) const;
+
+            //- Sensible internal energy [J/kg]
+            inline scalar EsRhoT(const scalar rho, const scalar e ,const scalar T) const;
+
+
+            inline scalar gamma(const scalar rho, const scalar e, const scalar T) const;
+
+            inline scalar tabulatedTRhoEs(const scalar T, const scalar rho, const scalar e) const;
+
+            inline scalar CpMCv(const scalar T, const scalar rho, const scalar e) const;
 
             //- Chemical enthalpy [J/kg]
             inline scalar Hc() const;
@@ -183,10 +195,10 @@ public:
             inline scalar S(const scalar rho, const scalar e) const;
 
             //- Return table
-            inline scalarLookupTable2D eTable() const
-            {
-                return eTable_;
-            }
+            // inline scalarLookupTable2D eTable() const
+            // {
+            //     return eTable_;
+            // }
 
             //- Gibbs free energy of the mixture in the standard state [J/kg]
             //inline scalar Gstd(const scalar T) const;

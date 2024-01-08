@@ -28,6 +28,12 @@ License
 
 #include "myThermo.H"
 
+
+// Type parameter defines wether the state function is absolute or relative to a standard state.
+
+// Thermo parameter defines how to convert from the state function to temperature. 
+
+
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
 template<class Thermo, template<class> class Type>
@@ -108,6 +114,16 @@ inline Foam::scalar Foam::mySpecies::thermo<Thermo, Type>::TFromRhoE
 ) const
 {
     Info << "TFromRhoE " << endl;
+
+
+    // I need to find a way to do a lookup without this whole thing below.
+    // It should be something like
+
+
+    // if(Thermo::typeName() == "eTabulated")
+    // {   
+    //     return Thermo::TFromRhoE(rho, e, T);
+    // }
 
     if (rho < SMALL)
     {
@@ -315,9 +331,11 @@ Foam::mySpecies::thermo<Thermo, Type>::HE(const scalar p, const scalar T) const
 
 template<class Thermo, template<class> class Type>
 inline Foam::scalar
-Foam::mySpecies::thermo<Thermo, Type>::HErhoT(const scalar rho, scalar e, const scalar T) const
+Foam::mySpecies::thermo<Thermo, Type>::HErhoT(const scalar rho, const scalar e, const scalar T) const
 {
     // Implementation of Type<thermo<Thermo, Type>>::HErhoT in sensibleInternalEnergy.H
+    Info << "In myThermo \n" << endl; 
+    Info << "rho = " << rho << endl;
     return Type<thermo<Thermo, Type>>::HErhoT(*this, rho, e, T);
 }
 

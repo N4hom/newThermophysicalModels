@@ -35,7 +35,7 @@ Foam::tabulatedEOS<Specie>::tabulatedEOS(const dictionary& dict)
 :
     Specie(dict),
     pTable_(dict.subDict("equationOfState"), "rho", "e", "p"),
-    eTable_(dict.subDict("thermodynamics"), "rho", "e", "T")
+    TTable_(dict.subDict("thermodynamics"), "rho", "e", "T")
 {
     Info << "Constructing equationOfState tabulatedEOS " << endl;
 
