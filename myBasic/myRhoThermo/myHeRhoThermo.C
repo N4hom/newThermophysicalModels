@@ -30,7 +30,7 @@ License
 
 // * * * * * * * * * * * * * Private Member Functions  * * * * * * * * * * * //
 
-template<class BasicPsiThermo, class MixtureType>
+/*template<class BasicPsiThermo, class MixtureType>
 void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
 (
     const volScalarField& p,
@@ -143,7 +143,9 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
             }
         }
     }
-}
+}*/
+
+
 
 template<class BasicPsiThermo, class MixtureType>
 void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculateFromRhoE()
@@ -159,9 +161,13 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculateFromRhoE()
     const typename MixtureType::thermoType& mixture_ =
             this->cellMixture(0);
 
-    Info << "mixture_.Cp(this->rho_[0], eCells[0], TCells[0]) " << mixture_.Cp(this->rho_[0], eCells[0], TCells[0])  << endl;
+    //Info << "mixture_.Cp(this->rho_[0], eCells[0], TCells[0]) " << mixture_.Cp(this->rho_[0], eCells[0], TCells[0])  << endl;
 
 
+    // The temperature and the pressure should be read from time folders
+    // when calculation is initialized and updated only at the end of a time step.
+    // Obviously the corresponding density needs to be consistent with p,T.
+    // It is up to the user to ensure this
     forAll(this->rho_, celli)
     {
         const typename MixtureType::thermoType& mixture_ =
@@ -196,7 +202,8 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculateFromRhoE()
      this->TRef().correctBoundaryConditions();
      this->pRef().correctBoundaryConditions();
      this->eRef().correctBoundaryConditions();
-     // this->eRef().correctBoundaryConditions(); gives a runtime error due to an error during lookup
+     // this->eRef().correctBoundaryConditions(); gave a runtime error due to a failed lookup.
+     // For future reference, the issue has been solved by storing the variable "he" in myBasicThermo
 
 
 
@@ -205,8 +212,8 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculateFromRhoE()
     volScalarField::Boundary& bCv = this->CvRef().boundaryFieldRef();
     volScalarField::Boundary& bmu = this->muRef().boundaryFieldRef();
     volScalarField::Boundary& balpha = this->alphaRef().boundaryFieldRef();
-    volScalarField::Boundary& bspeedOfSound =
-        this->speedOfSoundRef().boundaryFieldRef();
+    volScalarField::Boundary& bspeedOfSound = this->speedOfSoundRef().boundaryFieldRef();
+
 
     forAll(this->rho_.boundaryField(), patchi)
     {
@@ -235,8 +242,12 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculateFromRhoE()
             const scalar Cvi = mixture_.Cv(rhoi, ei, Ti);
             pCp[facei] = Cpi;
             pCv[facei] = Cvi;
+
+            // Commenting out because the thermodynamic class supports only inviscid simulations for the moment, due 
+            // to some missing dependencies.
             //pmu[facei] = mixture_.mu(rhoi, ei, Ti);
             //palpha[facei] = mixture_.kappa(rhoi, ei, Ti)/Cpi;
+            
             pspeedOfSound[facei] =
                 sqrt(max(mixture_.cSqr(rhoi, ei, Ti, Cvi), SMALL));
         }

@@ -28,7 +28,8 @@ Class
     Foam::myFluidThermo
 
 Description
-    Fundamental myFluid thermodynamic properties
+    Fundamental fluid thermodynamic properties. Currently it does not store variables,
+    but it should contain the viscosities (kinematic, dynamic), to be used for non-inviscid cases.
 
 SourceFiles
     myFluidThermo.C

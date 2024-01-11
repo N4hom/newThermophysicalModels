@@ -29,6 +29,9 @@ Class
 Description
     Foam::myPureMixture
 
+    There are no modifications here except the name.
+
+
 SourceFiles
     myPureMixture.C
 

@@ -32,7 +32,7 @@ Description
 
     This class is inspired by the pre-existing basicThermo class in the 
     standard distribution of OpenFOAM. It has been rewritten to change the choice
-    of the independent thermodynamic variables (p, T) --> (rho, e)
+    of the independent thermodynamic variables ((p, T) --> (rho, e)).
 
 SourceFiles
     myBasicThermo.C

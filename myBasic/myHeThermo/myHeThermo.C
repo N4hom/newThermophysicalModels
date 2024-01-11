@@ -106,6 +106,8 @@ void Foam::myHeThermo<BasicThermo, MixtureType>::initFromRhoT
     volScalarField& he
 )
 {
+    // Fill internal field values for the internal energy
+
     scalarField& heCells = he.primitiveFieldRef();
     const scalarField& rhoCells = rho.primitiveField();
     const scalarField& TCells = T.primitiveField();
@@ -117,6 +119,8 @@ void Foam::myHeThermo<BasicThermo, MixtureType>::initFromRhoT
         heCells[celli] =
             this->cellMixture(celli).HErhoT(rhoCells[celli], heCells[celli], TCells[celli]);
     }
+
+    // Fill all the boundary values for every patch
 
     volScalarField::Boundary& heBf = he.boundaryFieldRef();
 
