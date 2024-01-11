@@ -30,13 +30,9 @@ Class
 Description
     Abstract base-class for fluid and solid thermodynamic properties
 
-    An important concept is that the thermo can share an existing T
-    (similar to p) in which case it will not try to update it. This gets
-    triggered purely on construction order - the first one to register
-    T is responsible for updating it. Note that the mechanism also means
-    that if multiple thermos are running on the same mesh, only the first one
-    will update the temperature. The behaviour can be overridden using the
-    'updateT' dictionary entry.
+    This class is inspired by the pre-existing basicThermo class in the 
+    standard distribution of OpenFOAM. It has been rewritten to change the choice
+    of the independent thermodynamic variables (p, T) --> (rho, e)
 
 SourceFiles
     myBasicThermo.C
