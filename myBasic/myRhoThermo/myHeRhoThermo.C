@@ -327,25 +327,25 @@ Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::~myHeRhoThermo()
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-template<class BasicPsiThermo, class MixtureType>
-void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::correct()
-{
-    DebugInFunction << endl;
+// template<class BasicPsiThermo, class MixtureType>
+// void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::correct()
+// {
+//     DebugInFunction << endl;
 
-    calculate
-    (
-        this->p_,
-        this->T_,
-        this->he_,
-        this->psi_,
-        this->rho_,
-        this->mu_,
-        this->alpha_,
-        false           // No need to update old times
-    );
+//     calculate
+//     (
+//         this->p_,
+//         this->T_,
+//         this->he_,
+//         this->psi_,
+//         this->rho_,
+//         this->mu_,
+//         this->alpha_,
+//         false           // No need to update old times
+//     );
 
-    DebugInFunction << "Finished" << endl;
-}
+//     DebugInFunction << "Finished" << endl;
+// }
 
 template<class BasicPsiThermo, class MixtureType>
 void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::correctFromRhoE()

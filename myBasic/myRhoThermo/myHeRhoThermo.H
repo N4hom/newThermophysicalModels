@@ -61,17 +61,17 @@ class myHeRhoThermo
     // Private Member Functions
 
         //- Calculate the thermo variables
-        void calculate
-        (
-            const volScalarField& p,
-            volScalarField& T,
-            volScalarField& he,
-            volScalarField& psi,
-            volScalarField& rho,
-            volScalarField& mu,
-            volScalarField& alpha,
-            const bool doOldTimes
-        );
+        // void calculate
+        // (
+        //     const volScalarField& p,
+        //     volScalarField& T,
+        //     volScalarField& he,
+        //     volScalarField& psi,
+        //     volScalarField& rho,
+        //     volScalarField& mu,
+        //     volScalarField& alpha,
+        //     const bool doOldTimes
+        // );
 
         //- Calculate the thermo variables
         void calculateFromRhoE();
@@ -112,7 +112,7 @@ public:
     // Member functions
 
         //- Update properties
-        virtual void correct();
+        //virtual void correct();
 
 
         virtual void correctFromRhoE();

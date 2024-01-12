@@ -535,7 +535,7 @@ inline Foam::scalar Foam::mySpecies::thermo<Thermo, Type>::THE
     const scalar T0
 ) const
 {
-    Info << "Returning temperature from internal energy " << endl;
+    //Info << "Returning temperature from internal energy " << endl;
     return Type<thermo<Thermo, Type>>::THE(*this, he, p, T0);
 }
 
@@ -547,7 +547,7 @@ inline Foam::scalar Foam::mySpecies::thermo<Thermo, Type>::TRhoE
     const scalar e
 ) const
 {
-    Info << "Returning temperature from internal energy " << endl;
+    //Info << "Returning temperature from internal energy " << endl;
     return Type<thermo<Thermo, Type>>::TRhoE(*this, T, rho, e);
 }
 
@@ -592,24 +592,17 @@ inline Foam::scalar Foam::mySpecies::thermo<Thermo, Type>::TRhoE
 // }
 
 
-// template<class Thermo, template<class> class Type>
-// inline Foam::scalar Foam::mySpecies::thermo<Thermo, Type>::TEs
-// (
-//     const scalar es,
-//     const scalar p,
-//     const scalar T0
-// ) const
-// {
-//     return T
-//     (
-//         es,
-//         p,
-//         T0,
-//         &thermo<Thermo, Type>::Es,
-//         &thermo<Thermo, Type>::Cv,
-//         &thermo<Thermo, Type>::limit
-//     );
-// }
+template<class Thermo, template<class> class Type>
+inline Foam::scalar Foam::mySpecies::thermo<Thermo, Type>::TEs
+(
+    const scalar es,
+    const scalar p,
+    const scalar T0
+) const
+{
+    NotImplemented;
+    return 0;
+}
 
 
 

@@ -374,7 +374,7 @@ public:
 
 
         //- Update properties
-        virtual void correct() = 0;
+        //virtual void correct() = 0;
 
         virtual void correctFromRhoE() = 0;
 
