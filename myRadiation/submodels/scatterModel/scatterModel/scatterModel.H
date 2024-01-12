@@ -24,10 +24,10 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::radiation::scatterModel
+    Foam::myRadiation::scatterModel
 
 Description
-    Base class for radiation scattering
+    Base class for myRadiation scattering
 
 \*---------------------------------------------------------------------------*/
 
@@ -43,7 +43,7 @@ Description
 
 namespace Foam
 {
-namespace radiation
+namespace myRadiation
 {
 
 /*---------------------------------------------------------------------------*\
@@ -108,7 +108,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace radiation
+} // End namespace myRadiation
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

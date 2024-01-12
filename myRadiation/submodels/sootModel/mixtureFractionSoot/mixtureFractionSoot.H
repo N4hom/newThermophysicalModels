@@ -24,7 +24,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::radiation::mixtureFractionSoot
+    Foam::myRadiation::mixtureFractionSoot
 
 Group
     grpRadiationSootSubModels
@@ -75,7 +75,7 @@ SourceFiles
 namespace Foam
 {
 
-namespace radiation
+namespace myRadiation
 {
 
 /*---------------------------------------------------------------------------*\
@@ -169,7 +169,7 @@ public:
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 } // End namespace Foam
-} // End namespace radiation
+} // End namespace myRadiation
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 

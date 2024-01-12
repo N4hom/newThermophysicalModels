@@ -1,1 +1,0 @@
-../radiationModels/solarLoad/solarLoadBase.C

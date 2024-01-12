@@ -73,7 +73,7 @@ class constantAbsorption
 public:
 
     //- Runtime type information
-    TypeName("constantAbsorption");
+    TypeName("myConstantAbsorption");
 
 
     // Constructors

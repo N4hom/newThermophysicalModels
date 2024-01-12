@@ -79,7 +79,7 @@ protected:
 public:
 
     //- Runtime type information
-    TypeName("lookup");
+    TypeName("myLookup");
 
     // Constructors
 

@@ -31,8 +31,8 @@ License
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::autoPtr<Foam::radiation::absorptionEmissionModel>
-Foam::radiation::absorptionEmissionModel::New
+Foam::autoPtr<Foam::myRadiation::absorptionEmissionModel>
+Foam::myRadiation::absorptionEmissionModel::New
 (
     const dictionary& dict,
     const fvMesh& mesh

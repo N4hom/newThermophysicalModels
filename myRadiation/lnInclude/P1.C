@@ -1,1 +1,1 @@
-../radiationModels/P1/P1.C
+../myRadiationModels/P1/P1.C

@@ -24,7 +24,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::radiation::absorptionEmissionModel
+    Foam::myRadiation::absorptionEmissionModel
 
 Description
     Model to supply absorption and emission coefficients for radiation
@@ -45,7 +45,7 @@ Description
 
 namespace Foam
 {
-namespace radiation
+namespace myRadiation
 {
 
 /*---------------------------------------------------------------------------*\
@@ -69,7 +69,7 @@ protected:
 public:
 
     //- Runtime type information
-    TypeName("absorptionEmissionModel");
+    TypeName("myAbsorptionEmissionModel");
 
     //- Declare runtime constructor selection table
 
@@ -183,7 +183,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace radiation
+} // End namespace myRadiation
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

@@ -25,42 +25,36 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "noAbsorptionEmission.H"
-#include "addToRunTimeSelectionTable.H"
+#include "error.H"
+#include "scatterModel.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
 namespace Foam
 {
-    namespace myRadiation
+    namespace radiation
     {
-        defineTypeNameAndDebug(noAbsorptionEmission, 0);
-
-        addToRunTimeSelectionTable
-        (
-            absorptionEmissionModel,
-            noAbsorptionEmission,
-            dictionary
-        );
+        defineTypeNameAndDebug(scatterModel, 0);
+        defineRunTimeSelectionTable(scatterModel, dictionary);
     }
 }
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::myRadiation::noAbsorptionEmission::noAbsorptionEmission
+Foam::radiation::scatterModel::scatterModel
 (
-    const dictionary& dict,
+    const dictionary&,
     const fvMesh& mesh
 )
 :
-    absorptionEmissionModel(dict, mesh)
+    mesh_(mesh)
 {}
 
 
-// * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * * Destructor    * * * * * * * * * * * * * * //
 
-Foam::myRadiation::noAbsorptionEmission::~noAbsorptionEmission()
+Foam::radiation::scatterModel::~scatterModel()
 {}
 
 

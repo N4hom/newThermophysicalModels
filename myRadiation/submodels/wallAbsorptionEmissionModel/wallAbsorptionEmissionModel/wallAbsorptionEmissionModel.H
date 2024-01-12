@@ -63,7 +63,7 @@ protected:
 public:
 
     //- Runtime type information
-    TypeName("wallAbsorptionEmissionModel");
+    TypeName("myWallAbsorptionEmissionModel");
 
     // Declare runtime constructor selection table
 

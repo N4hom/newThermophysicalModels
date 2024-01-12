@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2018 OpenCFD Ltd.
+    Copyright (C) 2012-2016 OpenFOAM Foundation
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -24,112 +24,66 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::myRadiation::wallTransmissivityModel
+    Foam::radiation::noScatter
+
+Group
+    grpRadiationScatterSubModels
 
 Description
-    Base class for wall transmissivity models
+    Dummy scatter model for 'none'
+
+SourceFiles
+    scatterModel.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef wallTransmissivityModel_H
-#define wallTransmissivityModel_H
+#ifndef radiation_noScatter_H
+#define radiation_noScatter_H
 
-#include "dictionary.H"
-#include "autoPtr.H"
-#include "runTimeSelectionTables.H"
-#include "polyPatch.H"
+#include "scatterModel.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 namespace Foam
 {
-namespace myRadiation
+namespace radiation
 {
 
 /*---------------------------------------------------------------------------*\
-                   Class wallTransmissivityModel Declaration
+                          Class noScatter Declaration
 \*---------------------------------------------------------------------------*/
 
-class wallTransmissivityModel
+class noScatter
+:
+    public scatterModel
 {
-
-protected:
-
-    // Protected data
-
-        //- Reference to the polyPatch
-        const polyPatch& pp_;
-
 
 public:
 
     //- Runtime type information
-    TypeName("wallTransmissivityModel");
-
-    // Declare runtime constructor selection table
-
-        declareRunTimeSelectionTable
-        (
-            autoPtr,
-            wallTransmissivityModel,
-            dictionary,
-            (
-                const dictionary& dict,
-                const polyPatch& pp
-            ),
-            (dict, pp)
-        );
+    TypeName("none");
 
 
     // Constructors
 
         //- Construct from components
-        wallTransmissivityModel(const dictionary& dict, const polyPatch& pp);
-
-
-    // Selector
-
-        static autoPtr<wallTransmissivityModel> New
-        (
-            const dictionary& dict,
-            const polyPatch& pp
-        );
+        noScatter(const dictionary& dict, const fvMesh& mesh);
 
 
     //- Destructor
-    virtual ~wallTransmissivityModel() = default;
+    virtual ~noScatter() = default;
 
 
     // Member Functions
 
-        //- Return transmissivity
-        virtual tmp<scalarField> t
-        (
-            const label bandI = 0,
-            vectorField* incomingDirection = nullptr,
-            scalarField* T = nullptr
-        ) const = 0;
-
-        //- Return transmissivity on face
-        virtual scalar t
-        (
-            const label faceI,
-            const label bandI = 0,
-            const vector dir = Zero,
-            const scalar T = 0
-        ) const = 0;
-
-        //- Is Grey
-        virtual bool isGrey() const = 0;
-
-        //- Number of bands
-        virtual label nBands() const = 0;
+        //- Return scatter coefficient
+        tmp<volScalarField> sigmaEff() const;
 };
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace myRadiation
+} // End namespace radiation
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

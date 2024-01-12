@@ -26,7 +26,7 @@ License
 \*---------------------------------------------------------------------------*/
 
 #include "boundaryRadiationProperties.H"
-#include "radiationModel.H"
+#include "myRadiationModel.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 

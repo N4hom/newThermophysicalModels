@@ -31,7 +31,7 @@ License
 
 namespace Foam
 {
-    namespace radiation
+    namespace myRadiation
     {
         defineTypeNameAndDebug(absorptionEmissionModel, 0);
         defineRunTimeSelectionTable(absorptionEmissionModel, dictionary);
@@ -40,7 +40,7 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::radiation::absorptionEmissionModel::absorptionEmissionModel
+Foam::myRadiation::absorptionEmissionModel::absorptionEmissionModel
 (
     const dictionary& dict,
     const fvMesh& mesh
@@ -53,21 +53,21 @@ Foam::radiation::absorptionEmissionModel::absorptionEmissionModel
 
 // * * * * * * * * * * * * * * * * Destructor    * * * * * * * * * * * * * * //
 
-Foam::radiation::absorptionEmissionModel::~absorptionEmissionModel()
+Foam::myRadiation::absorptionEmissionModel::~absorptionEmissionModel()
 {}
 
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::absorptionEmissionModel::a(const label bandI) const
+Foam::myRadiation::absorptionEmissionModel::a(const label bandI) const
 {
     return aDisp(bandI) + aCont(bandI);
 }
 
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::absorptionEmissionModel::aCont(const label bandI) const
+Foam::myRadiation::absorptionEmissionModel::aCont(const label bandI) const
 {
     return tmp<volScalarField>
     (
@@ -90,7 +90,7 @@ Foam::radiation::absorptionEmissionModel::aCont(const label bandI) const
 
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::absorptionEmissionModel::aDisp(const label bandI) const
+Foam::myRadiation::absorptionEmissionModel::aDisp(const label bandI) const
 {
     return tmp<volScalarField>
     (
@@ -113,14 +113,14 @@ Foam::radiation::absorptionEmissionModel::aDisp(const label bandI) const
 
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::absorptionEmissionModel::e(const label bandI) const
+Foam::myRadiation::absorptionEmissionModel::e(const label bandI) const
 {
     return eDisp(bandI) + eCont(bandI);
 }
 
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::absorptionEmissionModel::eCont(const label bandI) const
+Foam::myRadiation::absorptionEmissionModel::eCont(const label bandI) const
 {
     return tmp<volScalarField>
     (
@@ -143,7 +143,7 @@ Foam::radiation::absorptionEmissionModel::eCont(const label bandI) const
 
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::absorptionEmissionModel::eDisp(const label bandI) const
+Foam::myRadiation::absorptionEmissionModel::eDisp(const label bandI) const
 {
     return tmp<volScalarField>
     (
@@ -166,14 +166,14 @@ Foam::radiation::absorptionEmissionModel::eDisp(const label bandI) const
 
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::absorptionEmissionModel::E(const label bandI) const
+Foam::myRadiation::absorptionEmissionModel::E(const label bandI) const
 {
     return EDisp(bandI) + ECont(bandI);
 }
 
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::absorptionEmissionModel::ECont(const label bandI) const
+Foam::myRadiation::absorptionEmissionModel::ECont(const label bandI) const
 {
     return tmp<volScalarField>
     (
@@ -196,7 +196,7 @@ Foam::radiation::absorptionEmissionModel::ECont(const label bandI) const
 
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::absorptionEmissionModel::EDisp(const label bandI) const
+Foam::myRadiation::absorptionEmissionModel::EDisp(const label bandI) const
 {
     return tmp<volScalarField>
     (
@@ -218,26 +218,26 @@ Foam::radiation::absorptionEmissionModel::EDisp(const label bandI) const
 }
 
 
-Foam::label Foam::radiation::absorptionEmissionModel::nBands() const
+Foam::label Foam::myRadiation::absorptionEmissionModel::nBands() const
 {
     return pTraits<label>::one;
 }
 
 
 const Foam::Vector2D<Foam::scalar>&
-Foam::radiation::absorptionEmissionModel::bands(const label n) const
+Foam::myRadiation::absorptionEmissionModel::bands(const label n) const
 {
     return Vector2D<scalar>::one;
 }
 
 
-bool Foam::radiation::absorptionEmissionModel::isGrey() const
+bool Foam::myRadiation::absorptionEmissionModel::isGrey() const
 {
     return false;
 }
 
 
-void Foam::radiation::absorptionEmissionModel::correct
+void Foam::myRadiation::absorptionEmissionModel::correct
 (
     volScalarField& a,
     PtrList<volScalarField>& aj

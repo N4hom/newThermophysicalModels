@@ -24,7 +24,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::radiation::boundaryRadiationProperties
+    Foam::myRadiation::boundaryRadiationProperties
 
 Description
     Boundary radiation properties holder
@@ -47,7 +47,7 @@ namespace Foam
 
 class fvMesh;
 
-namespace radiation
+namespace myRadiation
 {
 
 /*---------------------------------------------------------------------------*\
@@ -221,7 +221,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace radiation
+} // End namespace myRadiation
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2011-2015 OpenFOAM Foundation
+    Copyright (C) 2012-2015 OpenFOAM Foundation
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -25,43 +25,55 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "noAbsorptionEmission.H"
+#include "noScatter.H"
 #include "addToRunTimeSelectionTable.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 
 namespace Foam
 {
-    namespace myRadiation
+    namespace radiation
     {
-        defineTypeNameAndDebug(noAbsorptionEmission, 0);
-
-        addToRunTimeSelectionTable
-        (
-            absorptionEmissionModel,
-            noAbsorptionEmission,
-            dictionary
-        );
+        defineTypeNameAndDebug(noScatter, 0);
+        addToRunTimeSelectionTable(scatterModel, noScatter, dictionary);
     }
 }
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::myRadiation::noAbsorptionEmission::noAbsorptionEmission
+Foam::radiation::noScatter::noScatter
 (
     const dictionary& dict,
     const fvMesh& mesh
 )
 :
-    absorptionEmissionModel(dict, mesh)
+    scatterModel(dict, mesh)
 {}
 
 
-// * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
+// * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-Foam::myRadiation::noAbsorptionEmission::~noAbsorptionEmission()
-{}
+Foam::tmp<Foam::volScalarField> Foam::radiation::noScatter::sigmaEff() const
+{
+    return tmp<volScalarField>
+    (
+        new volScalarField
+        (
+            IOobject
+            (
+                "sigma",
+                mesh_.time().timeName(),
+                mesh_,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE,
+                false
+            ),
+            mesh_,
+            dimensionedScalar(dimless/dimLength, Zero)
+        )
+    );
+}
 
 
 // ************************************************************************* //

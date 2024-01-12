@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2011-2015 OpenFOAM Foundation
+    Copyright (C) 2011-2016 OpenFOAM Foundation
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -25,7 +25,11 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "noAbsorptionEmission.H"
+#include "noRadiation.H"
+#include "physicoChemicalConstants.H"
+#include "fvMesh.H"
+#include "Time.H"
+#include "volFields.H"
 #include "addToRunTimeSelectionTable.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
@@ -34,34 +38,86 @@ namespace Foam
 {
     namespace myRadiation
     {
-        defineTypeNameAndDebug(noAbsorptionEmission, 0);
-
-        addToRunTimeSelectionTable
-        (
-            absorptionEmissionModel,
-            noAbsorptionEmission,
-            dictionary
-        );
+        defineTypeNameAndDebug(noRadiation, 0);
+        addToRadiationRunTimeSelectionTables(noRadiation);
     }
 }
 
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::myRadiation::noAbsorptionEmission::noAbsorptionEmission
+Foam::myRadiation::noRadiation::noRadiation(const volScalarField& T)
+:
+    myRadiationModel(T)
+{}
+
+
+Foam::myRadiation::noRadiation::noRadiation
 (
     const dictionary& dict,
-    const fvMesh& mesh
+    const volScalarField& T
 )
 :
-    absorptionEmissionModel(dict, mesh)
+    myRadiationModel(T)
 {}
 
 
 // * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
 
-Foam::myRadiation::noAbsorptionEmission::~noAbsorptionEmission()
+Foam::myRadiation::noRadiation::~noRadiation()
 {}
+
+
+// * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
+
+bool Foam::myRadiation::noRadiation::read()
+{
+    return myRadiationModel::read();
+}
+
+
+void Foam::myRadiation::noRadiation::calculate()
+{}
+
+
+Foam::tmp<Foam::volScalarField> Foam::myRadiation::noRadiation::Rp() const
+{
+    return tmp<volScalarField>::New
+    (
+        IOobject
+        (
+            "Rp",
+            mesh_.time().timeName(),
+            mesh_,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        ),
+        mesh_,
+        dimensionedScalar
+        (
+            constant::physicoChemical::sigma.dimensions()/dimLength, Zero
+        )
+    );
+}
+
+
+Foam::tmp<Foam::DimensionedField<Foam::scalar, Foam::volMesh>>
+Foam::myRadiation::noRadiation::Ru() const
+{
+    return tmp<volScalarField::Internal>::New
+    (
+        IOobject
+        (
+            "Ru",
+            mesh_.time().timeName(),
+            mesh_,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        ),
+        mesh_,
+        dimensionedScalar(dimMass/dimLength/pow3(dimTime), Zero)
+    );
+}
 
 
 // ************************************************************************* //

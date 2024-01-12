@@ -24,7 +24,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::radiation::noAbsorptionEmission
+    Foam::myRadiation::noAbsorptionEmission
 
 Group
     grpRadiationAbsorptionEmissionSubModels
@@ -46,7 +46,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace radiation
+namespace myRadiation
 {
 
 /*---------------------------------------------------------------------------*\
@@ -61,7 +61,7 @@ class noAbsorptionEmission
 public:
 
     //- Runtime type information
-    TypeName("none");
+    TypeName("myNone");
 
 
     // Constructors
@@ -77,7 +77,7 @@ public:
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-} // End namespace radiation
+} // End namespace myRadiation
 } // End namespace Foam
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

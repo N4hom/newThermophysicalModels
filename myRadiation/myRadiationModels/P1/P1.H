@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2018 OpenCFD Ltd.
+    Copyright (C) 2011-2017 OpenFOAM Foundation
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -24,20 +24,30 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::myRadiation::wallTransmissivityModel
+    Foam::myRadiation::P1
+
+Group
+    grpRadiationModels
 
 Description
-    Base class for wall transmissivity models
+    Works well for combustion applications where optical thickness, tau is
+    large, i.e. tau = a*L > 3 (L = distance between objects)
+
+    Assumes
+     - all surfaces are diffuse
+     - tends to over predict radiative fluxes from sources/sinks
+       *** SOURCES NOT CURRENTLY INCLUDED ***
+
+SourceFiles
+    P1.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef wallTransmissivityModel_H
-#define wallTransmissivityModel_H
+#ifndef radiation_P1_H
+#define radiation_P1_H
 
-#include "dictionary.H"
-#include "autoPtr.H"
-#include "runTimeSelectionTables.H"
-#include "polyPatch.H"
+#include "myRadiationModel.H"
+#include "volFields.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -47,83 +57,80 @@ namespace myRadiation
 {
 
 /*---------------------------------------------------------------------------*\
-                   Class wallTransmissivityModel Declaration
+                           Class P1 Declaration
 \*---------------------------------------------------------------------------*/
 
-class wallTransmissivityModel
+class P1
+:
+    public myRadiationModel
 {
+    // Private data
 
-protected:
+        //- Incident radiation / [W/m2]
+        volScalarField G_;
 
-    // Protected data
+        //- Total radiative heat flux [W/m2]
+        volScalarField qr_;
 
-        //- Reference to the polyPatch
-        const polyPatch& pp_;
+        //- Absorption coefficient
+        volScalarField a_;
+
+        //- Emission coefficient
+        volScalarField e_;
+
+        //- Emission contribution
+        volScalarField E_;
+
+
+    // Private Member Functions
+
+        //- No copy construct
+        P1(const P1&) = delete;
+
+        //- No copy assignment
+        void operator=(const P1&) = delete;
 
 
 public:
 
     //- Runtime type information
-    TypeName("wallTransmissivityModel");
-
-    // Declare runtime constructor selection table
-
-        declareRunTimeSelectionTable
-        (
-            autoPtr,
-            wallTransmissivityModel,
-            dictionary,
-            (
-                const dictionary& dict,
-                const polyPatch& pp
-            ),
-            (dict, pp)
-        );
+    TypeName("myP1");
 
 
     // Constructors
 
         //- Construct from components
-        wallTransmissivityModel(const dictionary& dict, const polyPatch& pp);
+        P1(const volScalarField& T);
 
-
-    // Selector
-
-        static autoPtr<wallTransmissivityModel> New
-        (
-            const dictionary& dict,
-            const polyPatch& pp
-        );
+        //- Construct from components
+        P1(const dictionary& dict, const volScalarField& T);
 
 
     //- Destructor
-    virtual ~wallTransmissivityModel() = default;
+    virtual ~P1() = default;
 
 
-    // Member Functions
+    // Member functions
 
-        //- Return transmissivity
-        virtual tmp<scalarField> t
-        (
-            const label bandI = 0,
-            vectorField* incomingDirection = nullptr,
-            scalarField* T = nullptr
-        ) const = 0;
+        // Edit
 
-        //- Return transmissivity on face
-        virtual scalar t
-        (
-            const label faceI,
-            const label bandI = 0,
-            const vector dir = Zero,
-            const scalar T = 0
-        ) const = 0;
+            //- Solve radiation equation(s)
+            void calculate();
 
-        //- Is Grey
-        virtual bool isGrey() const = 0;
+            //- Read radiation properties dictionary
+            bool read();
 
-        //- Number of bands
-        virtual label nBands() const = 0;
+
+        // Access
+
+            //- Source term component (for power of T^4)
+            virtual tmp<volScalarField> Rp() const;
+
+            //- Source term component (constant)
+            virtual tmp<volScalarField::Internal> Ru() const;
+
+            //- Number of bands
+            label nBands() const;
 };
 
 

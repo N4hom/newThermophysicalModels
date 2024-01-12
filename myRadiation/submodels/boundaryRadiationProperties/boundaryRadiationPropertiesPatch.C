@@ -27,13 +27,13 @@ License
 
 #include "boundaryRadiationPropertiesPatch.H"
 #include "mappedPatchBase.H"
-#include "radiationModel.H"
+#include "myRadiationModel.H"
 #include "absorptionEmissionModel.H"
 
 // * * * * * * * * * * * * * Static Member Data  * * * * * * * * * * * * * * //
 namespace Foam
 {
-    namespace radiation
+    namespace myRadiation
     {
         defineTypeNameAndDebug(boundaryRadiationPropertiesPatch, 0);
         defineRunTimeSelectionTable
@@ -46,8 +46,8 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Selectors * * * * * * * * * * * * * * * * //
 
-Foam::autoPtr<Foam::radiation::boundaryRadiationPropertiesPatch>
-Foam::radiation::boundaryRadiationPropertiesPatch::New
+Foam::autoPtr<Foam::myRadiation::boundaryRadiationPropertiesPatch>
+Foam::myRadiation::boundaryRadiationPropertiesPatch::New
 (
     const dictionary& dict,
     const polyPatch& pp
@@ -78,7 +78,7 @@ Foam::radiation::boundaryRadiationPropertiesPatch::New
 // * * * * * * * * * * * * * * * * Private functions * * * * * * * * * * * * //
 
 Foam::label
-Foam::radiation::boundaryRadiationPropertiesPatch::nbrPatchIndex() const
+Foam::myRadiation::boundaryRadiationPropertiesPatch::nbrPatchIndex() const
 {
     // Get the coupling information from the mappedPatchBase
     const mappedPatchBase& mpp =
@@ -89,7 +89,7 @@ Foam::radiation::boundaryRadiationPropertiesPatch::nbrPatchIndex() const
 
 
 const Foam::fvMesh&
-Foam::radiation::boundaryRadiationPropertiesPatch::nbrRegion() const
+Foam::myRadiation::boundaryRadiationPropertiesPatch::nbrRegion() const
 {
     const mappedPatchBase& mpp =
         refCast<const mappedPatchBase>(patch_);
@@ -100,7 +100,7 @@ Foam::radiation::boundaryRadiationPropertiesPatch::nbrRegion() const
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::radiation::boundaryRadiationPropertiesPatch::
+Foam::myRadiation::boundaryRadiationPropertiesPatch::
 boundaryRadiationPropertiesPatch
 (
     const dictionary& dict,
@@ -116,21 +116,21 @@ boundaryRadiationPropertiesPatch
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-const Foam::radiation::wallAbsorptionEmissionModel&
-Foam::radiation::boundaryRadiationPropertiesPatch::absorptionEmission() const
+const Foam::myRadiation::wallAbsorptionEmissionModel&
+Foam::myRadiation::boundaryRadiationPropertiesPatch::absorptionEmission() const
 {
     return *absorptionEmission_;
 }
 
 
-const Foam::radiation::wallTransmissivityModel&
-Foam::radiation::boundaryRadiationPropertiesPatch::transmissiveModel() const
+const Foam::myRadiation::wallTransmissivityModel&
+Foam::myRadiation::boundaryRadiationPropertiesPatch::transmissiveModel() const
 {
     return *transmissivity_;
 }
 
 
-void Foam::radiation::boundaryRadiationPropertiesPatch::write(Ostream& os) const
+void Foam::myRadiation::boundaryRadiationPropertiesPatch::write(Ostream& os) const
 {
     NotImplemented;
 }

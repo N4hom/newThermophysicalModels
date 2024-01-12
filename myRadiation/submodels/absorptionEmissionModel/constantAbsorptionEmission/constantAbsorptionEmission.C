@@ -32,7 +32,7 @@ License
 
 namespace Foam
 {
-    namespace radiation
+    namespace myRadiation
     {
         defineTypeNameAndDebug(constantAbsorptionEmission, 0);
 
@@ -48,7 +48,7 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::radiation::constantAbsorptionEmission::constantAbsorptionEmission
+Foam::myRadiation::constantAbsorptionEmission::constantAbsorptionEmission
 (
     const dictionary& dict,
     const fvMesh& mesh
@@ -65,7 +65,7 @@ Foam::radiation::constantAbsorptionEmission::constantAbsorptionEmission
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::constantAbsorptionEmission::aCont(const label bandI) const
+Foam::myRadiation::constantAbsorptionEmission::aCont(const label bandI) const
 {
     tmp<volScalarField> ta
     (
@@ -90,7 +90,7 @@ Foam::radiation::constantAbsorptionEmission::aCont(const label bandI) const
 
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::constantAbsorptionEmission::eCont(const label bandI) const
+Foam::myRadiation::constantAbsorptionEmission::eCont(const label bandI) const
 {
     tmp<volScalarField> te
     (
@@ -115,7 +115,7 @@ Foam::radiation::constantAbsorptionEmission::eCont(const label bandI) const
 
 
 Foam::tmp<Foam::volScalarField>
-Foam::radiation::constantAbsorptionEmission::ECont(const label bandI) const
+Foam::myRadiation::constantAbsorptionEmission::ECont(const label bandI) const
 {
     tmp<volScalarField> tE
     (

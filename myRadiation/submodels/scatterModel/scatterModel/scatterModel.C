@@ -32,7 +32,7 @@ License
 
 namespace Foam
 {
-    namespace radiation
+    namespace myRadiation
     {
         defineTypeNameAndDebug(scatterModel, 0);
         defineRunTimeSelectionTable(scatterModel, dictionary);
@@ -42,7 +42,7 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::radiation::scatterModel::scatterModel
+Foam::myRadiation::scatterModel::scatterModel
 (
     const dictionary&,
     const fvMesh& mesh
@@ -54,7 +54,7 @@ Foam::radiation::scatterModel::scatterModel
 
 // * * * * * * * * * * * * * * * * Destructor    * * * * * * * * * * * * * * //
 
-Foam::radiation::scatterModel::~scatterModel()
+Foam::myRadiation::scatterModel::~scatterModel()
 {}
 
 

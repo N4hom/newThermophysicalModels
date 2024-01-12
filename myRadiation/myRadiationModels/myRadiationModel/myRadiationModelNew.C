@@ -5,7 +5,7 @@
     \\  /    A nd           | www.openfoam.com
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
-    Copyright (C) 2011-2015 OpenFOAM Foundation
+    Copyright (C) 2011-2017 OpenFOAM Foundation
     Copyright (C) 2019-2021 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
@@ -26,20 +26,74 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "error.H"
-#include "scatterModel.H"
+#include "myRadiationModel.H"
+#include "volFields.H"
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::autoPtr<Foam::myRadiation::scatterModel> Foam::myRadiation::scatterModel::New
+Foam::autoPtr<Foam::myRadiation::myRadiationModel>
+Foam::myRadiation::myRadiationModel::New
 (
-    const dictionary& dict,
-    const fvMesh& mesh
+    const volScalarField& T
 )
 {
-    const word modelType(dict.get<word>("scatterModel"));
+    word modelType("none");
 
-    Info<< "Selecting scatterModel " << modelType << endl;
+    dictionary dict;
+
+    IOobject io
+    (
+        "radiationProperties",
+        T.time().constant(),
+        T.mesh(),
+        IOobject::MUST_READ_IF_MODIFIED,
+        IOobject::NO_WRITE,
+        false // Do not register
+    );
+
+    if (io.typeHeaderOk<IOdictionary>(true))
+    {
+        IOdictionary propDict(io);
+
+        dict = std::move(propDict);
+
+        dict.readEntry("myRadiationModel", modelType);
+    }
+    else
+    {
+        Info<< "Radiation model not active: radiationProperties not found"
+            << endl;
+    }
+
+    Info<< "Selecting myRadiationModel " << modelType << endl;
+
+    auto* ctorPtr = TConstructorTable(modelType);
+
+    if (!ctorPtr)
+    {
+        FatalIOErrorInLookup
+        (
+            dict,
+            "myRadiationModel",
+            modelType,
+            *TConstructorTablePtr_
+        ) << exit(FatalIOError);
+    }
+
+    return autoPtr<myRadiationModel>(ctorPtr(T));
+}
+
+
+Foam::autoPtr<Foam::myRadiation::myRadiationModel>
+Foam::myRadiation::myRadiationModel::New
+(
+    const dictionary& dict,
+    const volScalarField& T
+)
+{
+    const word modelType(dict.get<word>("myRadiationModel"));
+
+    Info<< "Selecting myRadiationModel " << modelType << endl;
 
     auto* ctorPtr = dictionaryConstructorTable(modelType);
 
@@ -48,13 +102,13 @@ Foam::autoPtr<Foam::myRadiation::scatterModel> Foam::myRadiation::scatterModel::
         FatalIOErrorInLookup
         (
             dict,
-            "scatterModel",
+            "myRadiationModel",
             modelType,
             *dictionaryConstructorTablePtr_
         ) << exit(FatalIOError);
     }
 
-    return autoPtr<scatterModel>(ctorPtr(dict, mesh));
+    return autoPtr<myRadiationModel>(ctorPtr(dict, T));
 }
 
 

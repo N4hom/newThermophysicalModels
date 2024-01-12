@@ -97,7 +97,7 @@ private:
 public:
 
     //- Runtime type information
-    TypeName("multiBandAbsorption");
+    TypeName("myMultiBandAbsorption");
 
 
     // Constructors

@@ -6,6 +6,7 @@
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
     Copyright (C) 2011-2015 OpenFOAM Foundation
+    Copyright (C) 2019-2021 OpenCFD Ltd.
 -------------------------------------------------------------------------------
 License
     This file is part of OpenFOAM.
@@ -25,43 +26,36 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "noAbsorptionEmission.H"
-#include "addToRunTimeSelectionTable.H"
-
-// * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
-
-namespace Foam
-{
-    namespace myRadiation
-    {
-        defineTypeNameAndDebug(noAbsorptionEmission, 0);
-
-        addToRunTimeSelectionTable
-        (
-            absorptionEmissionModel,
-            noAbsorptionEmission,
-            dictionary
-        );
-    }
-}
-
+#include "error.H"
+#include "scatterModel.H"
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::myRadiation::noAbsorptionEmission::noAbsorptionEmission
+Foam::autoPtr<Foam::radiation::scatterModel> Foam::radiation::scatterModel::New
 (
     const dictionary& dict,
     const fvMesh& mesh
 )
-:
-    absorptionEmissionModel(dict, mesh)
-{}
+{
+    const word modelType(dict.get<word>("scatterModel"));
 
+    Info<< "Selecting scatterModel " << modelType << endl;
 
-// * * * * * * * * * * * * * * * * Destructor  * * * * * * * * * * * * * * * //
+    auto* ctorPtr = dictionaryConstructorTable(modelType);
 
-Foam::myRadiation::noAbsorptionEmission::~noAbsorptionEmission()
-{}
+    if (!ctorPtr)
+    {
+        FatalIOErrorInLookup
+        (
+            dict,
+            "scatterModel",
+            modelType,
+            *dictionaryConstructorTablePtr_
+        ) << exit(FatalIOError);
+    }
+
+    return autoPtr<scatterModel>(ctorPtr(dict, mesh));
+}
 
 
 // ************************************************************************* //
