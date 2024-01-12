@@ -31,7 +31,7 @@ License
 #include "scatterModel.H"
 #include "sootModel.H"
 #include "fvmSup.H"
-#include "basicThermo.H"
+#include "myBasicThermo.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
 

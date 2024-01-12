@@ -78,6 +78,12 @@ Foam::scalar Foam::tabulatedEOS<Specie>::p(const scalar rho, const scalar e, con
     return pTable_.lookup(rho, e);
 }
 
+template<class Specie>
+inline Foam::scalar Foam::tabulatedEOS<Specie>::rho(scalar p, scalar T) const
+{
+    NotImplemented;
+    return 0;
+}
 
 template<class Specie>
 inline Foam::scalar Foam::tabulatedEOS<Specie>::H(scalar p, scalar T) const
