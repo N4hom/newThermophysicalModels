@@ -24,7 +24,7 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Class
-    Foam::MarshakRadiationFvPatchScalarField
+    Foam::MarshakRadiationFixedTemperatureFvPatchScalarField
 
 Group
     grpThermoBoundaryConditions
@@ -33,8 +33,8 @@ Description
     A 'mixed' boundary condition that implements a Marshak condition for the
     incident radiation field (usually written as G)
 
-    The radiation temperature is retrieved from the mesh database, using a
-    user specified temperature field name.
+    The radiation temperature field across the patch is supplied by the user
+    using the \c Trad entry.
 
 Usage
     \table
@@ -46,9 +46,9 @@ Usage
     \verbatim
     <patchName>
     {
-        type            MarshakRadiation;
-        T               T;
-        value           uniform 0;
+        type            MarshakRadiationFixedTemperature;
+        Trad            uniform 1000;       // radiation temperature field
+        value           uniform 0;          // place holder
     }
     \endverbatim
 
@@ -57,12 +57,12 @@ See also
     Foam::mixedFvPatchField
 
 SourceFiles
-    MarshakRadiationFvPatchScalarField.C
+    MarshakRadiationFixedTemperatureFvPatchScalarField.C
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef radiation_MarshakRadiationFvPatchScalarField_H
-#define radiation_MarshakRadiationFvPatchScalarField_H
+#ifndef MarshakRadiationFixedTemperatureFvPatchScalarField_H
+#define MarshakRadiationFixedTemperatureFvPatchScalarField_H
 
 #include "mixedFvPatchFields.H"
 
@@ -72,39 +72,39 @@ namespace Foam
 {
 namespace myRadiation
 {
-
 /*---------------------------------------------------------------------------*\
-             Class MarshakRadiationFvPatchScalarField Declaration
+     Class MarshakRadiationFixedTemperatureFvPatchScalarField Declaration
 \*---------------------------------------------------------------------------*/
 
-class MarshakRadiationFvPatchScalarField
+class MarshakRadiationFixedTemperatureFvPatchScalarField
 :
     public mixedFvPatchScalarField
+    //public radiationCoupledBase
 {
 
     // Private data
 
-        //- Name of temperature field
-        word TName_;
+        //- Radiation temperature field
+        scalarField Trad_;
 
 
 public:
 
     //- Runtime type information
-    TypeName("MarshakRadiation");
+    TypeName("myMarshakRadiationFixedTemperature");
 
 
     // Constructors
 
         //- Construct from patch and internal field
-        MarshakRadiationFvPatchScalarField
+        MarshakRadiationFixedTemperatureFvPatchScalarField
         (
             const fvPatch&,
             const DimensionedField<scalar, volMesh>&
         );
 
         //- Construct from patch, internal field and dictionary
-        MarshakRadiationFvPatchScalarField
+        MarshakRadiationFixedTemperatureFvPatchScalarField
         (
             const fvPatch&,
             const DimensionedField<scalar, volMesh>&,
@@ -113,18 +113,18 @@ public:
 
         //- Construct by mapping given MarshakRadiationFvPatchField onto a new
         //  patch
-        MarshakRadiationFvPatchScalarField
+        MarshakRadiationFixedTemperatureFvPatchScalarField
         (
-            const MarshakRadiationFvPatchScalarField&,
+            const MarshakRadiationFixedTemperatureFvPatchScalarField&,
             const fvPatch&,
             const DimensionedField<scalar, volMesh>&,
             const fvPatchFieldMapper&
         );
 
         //- Construct as copy
-        MarshakRadiationFvPatchScalarField
+        MarshakRadiationFixedTemperatureFvPatchScalarField
         (
-            const MarshakRadiationFvPatchScalarField&
+            const MarshakRadiationFixedTemperatureFvPatchScalarField&
         );
 
         //- Construct and return a clone
@@ -132,14 +132,14 @@ public:
         {
             return tmp<fvPatchScalarField>
             (
-                new MarshakRadiationFvPatchScalarField(*this)
+                new MarshakRadiationFixedTemperatureFvPatchScalarField(*this)
             );
         }
 
         //- Construct as copy setting internal field reference
-        MarshakRadiationFvPatchScalarField
+        MarshakRadiationFixedTemperatureFvPatchScalarField
         (
-            const MarshakRadiationFvPatchScalarField&,
+            const MarshakRadiationFixedTemperatureFvPatchScalarField&,
             const DimensionedField<scalar, volMesh>&
         );
 
@@ -151,7 +151,11 @@ public:
         {
             return tmp<fvPatchScalarField>
             (
-                new MarshakRadiationFvPatchScalarField(*this, iF)
+                new MarshakRadiationFixedTemperatureFvPatchScalarField
+                (
+                    *this,
+                    iF
+                )
             );
         }
 
@@ -160,18 +164,34 @@ public:
 
         // Access
 
-            //- Return the temperature field name
-            const word& TName() const
+            //- Return the radiation temperature
+            const scalarField& Trad() const
             {
-                return TName_;
+                return Trad_;
             }
 
-            //- Return reference to the temperature field name to allow
+            //- Return reference to the radiation temperature to allow
             //  adjustment
-            word& TName()
+            scalarField& Trad()
             {
-                return TName_;
+                return Trad_;
             }
+
+
+        // Mapping functions
+
+            //- Map (and resize as needed) from self given a mapping object
+            virtual void autoMap
+            (
+                const fvPatchFieldMapper&
+            );
+
+            //- Reverse map the given fvPatchField onto this fvPatchField
+            virtual void rmap
+            (
+                const fvPatchScalarField&,
+                const labelList&
+            );
 
 
         // Evaluation functions

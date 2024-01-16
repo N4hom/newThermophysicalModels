@@ -77,7 +77,7 @@ class boundaryRadiationProperties
 public:
 
     // Declare name of the class and its debug switch
-    TypeName("boundaryRadiationProperties");
+    TypeName("myBoundaryRadiationProperties");
 
 
     // Constructors

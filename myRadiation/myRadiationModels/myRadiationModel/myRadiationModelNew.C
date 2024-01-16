@@ -43,7 +43,7 @@ Foam::myRadiation::myRadiationModel::New
 
     IOobject io
     (
-        "radiationProperties",
+        "myRadiationProperties",
         T.time().constant(),
         T.mesh(),
         IOobject::MUST_READ_IF_MODIFIED,

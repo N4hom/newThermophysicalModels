@@ -32,7 +32,7 @@ License
 
 namespace Foam
 {
-    namespace radiation
+    namespace myRadiation
     {
         defineTypeNameAndDebug(opaqueDiffusive, 0);
         addToRunTimeSelectionTable
@@ -47,7 +47,7 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::radiation::opaqueDiffusive::opaqueDiffusive
+Foam::myRadiation::opaqueDiffusive::opaqueDiffusive
 (
     const dictionary& dict,
     const polyPatch& pp
@@ -68,7 +68,7 @@ Foam::radiation::opaqueDiffusive::opaqueDiffusive
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-Foam::tmp<Foam::scalarField> Foam::radiation::opaqueDiffusive::e
+Foam::tmp<Foam::scalarField> Foam::myRadiation::opaqueDiffusive::e
 (
     const label bandI,
     vectorField* dir,
@@ -79,7 +79,7 @@ Foam::tmp<Foam::scalarField> Foam::radiation::opaqueDiffusive::e
 }
 
 
-Foam::scalar Foam::radiation::opaqueDiffusive::e
+Foam::scalar Foam::myRadiation::opaqueDiffusive::e
 (
     const label faceI,
     const label bandI,
@@ -92,7 +92,7 @@ Foam::scalar Foam::radiation::opaqueDiffusive::e
 
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::opaqueDiffusive::a
+Foam::myRadiation::opaqueDiffusive::a
 (
     const label bandI,
     vectorField* dir,
@@ -103,7 +103,7 @@ Foam::radiation::opaqueDiffusive::a
 }
 
 
-Foam::scalar Foam::radiation::opaqueDiffusive::a
+Foam::scalar Foam::myRadiation::opaqueDiffusive::a
 (
     const label faceI,
     const label bandI,
@@ -115,7 +115,7 @@ Foam::scalar Foam::radiation::opaqueDiffusive::a
 }
 
 
-Foam::tmp<Foam::scalarField> Foam::radiation::opaqueDiffusive::t
+Foam::tmp<Foam::scalarField> Foam::myRadiation::opaqueDiffusive::t
 (
     const label bandI,
     vectorField* dir,
@@ -126,7 +126,7 @@ Foam::tmp<Foam::scalarField> Foam::radiation::opaqueDiffusive::t
 }
 
 
-Foam::scalar Foam::radiation::opaqueDiffusive::t
+Foam::scalar Foam::myRadiation::opaqueDiffusive::t
 (
     const label faceI,
     const label bandI,
@@ -139,7 +139,7 @@ Foam::scalar Foam::radiation::opaqueDiffusive::t
 
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::opaqueDiffusive::rSpec
+Foam::myRadiation::opaqueDiffusive::rSpec
 (
     const label bandI,
     vectorField* dir,
@@ -150,7 +150,7 @@ Foam::radiation::opaqueDiffusive::rSpec
 }
 
 
-Foam::scalar Foam::radiation::opaqueDiffusive::rSpec
+Foam::scalar Foam::myRadiation::opaqueDiffusive::rSpec
 (
     const label faceI,
     const label bandI,
@@ -162,7 +162,7 @@ Foam::scalar Foam::radiation::opaqueDiffusive::rSpec
 }
 
 
-Foam::tmp<Foam::scalarField> Foam::radiation::opaqueDiffusive::rDiff
+Foam::tmp<Foam::scalarField> Foam::myRadiation::opaqueDiffusive::rDiff
 (
     const label bandI,
     vectorField* dir,
@@ -173,7 +173,7 @@ Foam::tmp<Foam::scalarField> Foam::radiation::opaqueDiffusive::rDiff
 }
 
 
-Foam::scalar Foam::radiation::opaqueDiffusive::rDiff
+Foam::scalar Foam::myRadiation::opaqueDiffusive::rDiff
 (
     const label faceI,
     const label bandI,
@@ -185,13 +185,13 @@ Foam::scalar Foam::radiation::opaqueDiffusive::rDiff
 }
 
 
-bool Foam::radiation::opaqueDiffusive::isGrey() const
+bool Foam::myRadiation::opaqueDiffusive::isGrey() const
 {
     return absorptionEmission_->isGrey();
 }
 
 
-Foam::label Foam::radiation::opaqueDiffusive::nBands() const
+Foam::label Foam::myRadiation::opaqueDiffusive::nBands() const
 {
     return absorptionEmission_->nBands();
 }

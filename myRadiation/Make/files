@@ -11,28 +11,33 @@ submodels/scatterModel/scatterModel/scatterModelNew.C
 submodels/scatterModel/noScatter/noScatter.C
 /*submodels/scatterModel/constantScatter/constantScatter.C
 */
+
 /* Wall sub-models */
+submodels/wallTransmissivityModel/wallTransmissivityModel/wallTransmissivityModel.C
+submodels/wallTransmissivityModel/wallTransmissivityModel/wallTransmissivityModelNew.C
+submodels/wallTransmissivityModel/constantTransmissivity/constantTransmissivity.C
 
-
-
+submodels/wallAbsorptionEmissionModel/wallAbsorptionEmissionModel/wallAbsorptionEmissionModel.C
+submodels/wallAbsorptionEmissionModel/wallAbsorptionEmissionModel/wallAbsorptionEmissionModelNew.C
 
 /* Absorption/Emission model */
 submodels/absorptionEmissionModel/absorptionEmissionModel/absorptionEmissionModel.C
 submodels/absorptionEmissionModel/absorptionEmissionModel/absorptionEmissionModelNew.C
 submodels/absorptionEmissionModel/noAbsorptionEmission/noAbsorptionEmission.C
 submodels/absorptionEmissionModel/constantAbsorptionEmission/constantAbsorptionEmission.C
-
+submodels/boundaryRadiationProperties/boundaryRadiationProperties.C
+submodels/boundaryRadiationProperties/boundaryRadiationPropertiesPatch.C
 
 /* Types of radiative walls */
 
-
+submodels/boundaryRadiationProperties/lookup/lookup.C
 
 /* Solar calculator model */
 
 
 /* Boundary conditions */
-/*derivedFvPatchFields/MarshakRadiation/MarshakRadiationFvPatchScalarField.C
-derivedFvPatchFields/MarshakRadiationFixedTemperature/MarshakRadiationFixedTemperatureFvPatchScalarField.C*/
+derivedFvPatchFields/MarshakRadiation/MarshakRadiationFvPatchScalarField.C
+derivedFvPatchFields/MarshakRadiationFixedTemperature/MarshakRadiationFixedTemperatureFvPatchScalarField.C
 
 
 

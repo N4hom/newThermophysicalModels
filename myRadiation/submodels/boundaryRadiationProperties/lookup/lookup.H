@@ -54,7 +54,7 @@ Usage
 
 namespace Foam
 {
-namespace radiation
+namespace myRadiation
 {
 
 /*---------------------------------------------------------------------------*\

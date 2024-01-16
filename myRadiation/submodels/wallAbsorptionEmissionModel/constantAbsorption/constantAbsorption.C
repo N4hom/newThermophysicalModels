@@ -32,7 +32,7 @@ License
 
 namespace Foam
 {
-    namespace radiation
+    namespace myRadiation
     {
         defineTypeNameAndDebug(constantAbsorption, 0);
 
@@ -48,7 +48,7 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::radiation::constantAbsorption::constantAbsorption
+Foam::myRadiation::constantAbsorption::constantAbsorption
 (
     const dictionary& dict,
      const polyPatch& pp
@@ -63,7 +63,7 @@ Foam::radiation::constantAbsorption::constantAbsorption
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-Foam::tmp<Foam::scalarField> Foam::radiation::constantAbsorption::a
+Foam::tmp<Foam::scalarField> Foam::myRadiation::constantAbsorption::a
 (
     const label bandI,
     vectorField* incomingDirection,
@@ -74,7 +74,7 @@ Foam::tmp<Foam::scalarField> Foam::radiation::constantAbsorption::a
 }
 
 
-Foam::scalar Foam::radiation::constantAbsorption::a
+Foam::scalar Foam::myRadiation::constantAbsorption::a
 (
     const label faceI,
     const label bandI,
@@ -86,7 +86,7 @@ Foam::scalar Foam::radiation::constantAbsorption::a
 }
 
 
-Foam::tmp<Foam::scalarField> Foam::radiation::constantAbsorption::e
+Foam::tmp<Foam::scalarField> Foam::myRadiation::constantAbsorption::e
 (
     const label bandI,
     vectorField* incomingDirection,
@@ -97,7 +97,7 @@ Foam::tmp<Foam::scalarField> Foam::radiation::constantAbsorption::e
 }
 
 
-Foam::scalar Foam::radiation::constantAbsorption::e
+Foam::scalar Foam::myRadiation::constantAbsorption::e
 (
     const label faceI,
     const label bandI,

@@ -1,4 +1,4 @@
-Info << "Creating radiation model \n" << endl;
+Info << "Creating myRadiationModel \n" << endl;
     autoPtr<myRadiation::myRadiationModel> radiation
     (
         myRadiation::myRadiationModel::New(thermo.T())

@@ -63,7 +63,7 @@ Foam::IOobject Foam::myRadiation::myRadiationModel::createIOobject
 {
     IOobject io
     (
-        "radiationProperties",
+        "myRadiationProperties",
         mesh.time().constant(),
         mesh,
         IOobject::MUST_READ,
@@ -85,6 +85,8 @@ Foam::IOobject Foam::myRadiation::myRadiationModel::createIOobject
 
 void Foam::myRadiation::myRadiationModel::initialise()
 {
+    Info << "initialise " << endl;
+
     if (radiation_)
     {
         solverFreq_ = max(1, getOrDefault<label>("solverFreq", 1));
@@ -118,7 +120,7 @@ Foam::myRadiation::myRadiationModel::myRadiationModel(const volScalarField& T)
     (
         IOobject
         (
-            "radiationProperties",
+            "myRadiationProperties",
             T.time().constant(),
             T.mesh(),
             IOobject::NO_READ,
@@ -134,7 +136,8 @@ Foam::myRadiation::myRadiationModel::myRadiationModel(const volScalarField& T)
     firstIter_(true),
     absorptionEmission_(nullptr),
     scatter_(nullptr)
-{}
+{
+}
 
 
 Foam::myRadiation::myRadiationModel::myRadiationModel
@@ -160,6 +163,7 @@ Foam::myRadiation::myRadiationModel::myRadiationModel
     }
 
     initialise();
+
 }
 
 
@@ -174,7 +178,7 @@ Foam::myRadiation::myRadiationModel::myRadiationModel
     (
         IOobject
         (
-            "radiationProperties",
+            "myRadiationProperties",
             T.time().constant(),
             T.mesh(),
             IOobject::NO_READ,
@@ -191,7 +195,8 @@ Foam::myRadiation::myRadiationModel::myRadiationModel
     firstIter_(true),
     absorptionEmission_(nullptr),
     scatter_(nullptr)
-{
+{    
+
     initialise();
 }
 
@@ -247,8 +252,14 @@ Foam::tmp<Foam::fvScalarMatrix> Foam::myRadiation::myRadiationModel::Sh
     const volScalarField& he
 ) const
 {
+    Info << " const volScalarField Cpv(thermo.Cpv()); " << endl;
     const volScalarField Cpv(thermo.Cpv());
+
+    Info << " const volScalarField T3(pow3(T_)); " << endl;
     const volScalarField T3(pow3(T_));
+
+    Info << "Ru() " << Ru() << endl;
+    Info << "Rp() " << Rp() << endl;
 
     return
     (

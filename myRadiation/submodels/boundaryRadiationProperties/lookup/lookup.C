@@ -32,7 +32,7 @@ License
 
 namespace Foam
 {
-    namespace radiation
+    namespace myRadiation
     {
         defineTypeNameAndDebug(lookup, 0);
         addToRunTimeSelectionTable
@@ -47,7 +47,7 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::radiation::lookup::lookup
+Foam::myRadiation::lookup::lookup
 (
     const dictionary& dict,
     const polyPatch& pp
@@ -61,7 +61,7 @@ Foam::radiation::lookup::lookup
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-Foam::tmp<Foam::scalarField> Foam::radiation::lookup::e
+Foam::tmp<Foam::scalarField> Foam::myRadiation::lookup::e
 (
     const label bandI,
     vectorField* dir,
@@ -76,7 +76,7 @@ Foam::tmp<Foam::scalarField> Foam::radiation::lookup::e
 }
 
 
-Foam::scalar Foam::radiation::lookup::e
+Foam::scalar Foam::myRadiation::lookup::e
 (
     const label faceI,
     const label bandI,
@@ -89,7 +89,7 @@ Foam::scalar Foam::radiation::lookup::e
 
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::lookup::a
+Foam::myRadiation::lookup::a
 (
     const label bandI,
     vectorField* dir,
@@ -104,7 +104,7 @@ Foam::radiation::lookup::a
 }
 
 
-Foam::scalar Foam::radiation::lookup::a
+Foam::scalar Foam::myRadiation::lookup::a
 (
     const label faceI,
     const label bandI,
@@ -116,7 +116,7 @@ Foam::scalar Foam::radiation::lookup::a
 }
 
 
-Foam::tmp<Foam::scalarField> Foam::radiation::lookup::t
+Foam::tmp<Foam::scalarField> Foam::myRadiation::lookup::t
 (
     const label bandI,
     vectorField* dir,
@@ -131,7 +131,7 @@ Foam::tmp<Foam::scalarField> Foam::radiation::lookup::t
 }
 
 
-Foam::scalar Foam::radiation::lookup::t
+Foam::scalar Foam::myRadiation::lookup::t
 (
     const label faceI,
     const label bandI,
@@ -144,7 +144,7 @@ Foam::scalar Foam::radiation::lookup::t
 
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::lookup::rSpec
+Foam::myRadiation::lookup::rSpec
 (
     const label bandI,
     vectorField* dir,
@@ -155,7 +155,7 @@ Foam::radiation::lookup::rSpec
 }
 
 
-Foam::scalar Foam::radiation::lookup::rSpec
+Foam::scalar Foam::myRadiation::lookup::rSpec
 (
     const label faceI,
     const label bandI,
@@ -168,7 +168,7 @@ Foam::scalar Foam::radiation::lookup::rSpec
 
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::lookup::rDiff
+Foam::myRadiation::lookup::rDiff
 (
     const label bandI,
     vectorField* dir,
@@ -179,7 +179,7 @@ Foam::radiation::lookup::rDiff
 }
 
 
-Foam::scalar Foam::radiation::lookup::rDiff
+Foam::scalar Foam::myRadiation::lookup::rDiff
 (
     const label faceI,
     const label bandI,
@@ -191,13 +191,13 @@ Foam::scalar Foam::radiation::lookup::rDiff
 }
 
 
-bool Foam::radiation::lookup::isGrey() const
+bool Foam::myRadiation::lookup::isGrey() const
 {
     return true;
 }
 
 
-Foam::label Foam::radiation::lookup::nBands() const
+Foam::label Foam::myRadiation::lookup::nBands() const
 {
     return 1;
 }

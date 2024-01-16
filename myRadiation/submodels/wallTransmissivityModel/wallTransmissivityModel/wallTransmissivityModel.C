@@ -32,7 +32,7 @@ License
 
 namespace Foam
 {
-    namespace radiation
+    namespace myRadiation
     {
         defineTypeNameAndDebug(wallTransmissivityModel, 0);
         defineRunTimeSelectionTable(wallTransmissivityModel, dictionary);
@@ -42,7 +42,7 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::radiation::wallTransmissivityModel::wallTransmissivityModel
+Foam::myRadiation::wallTransmissivityModel::wallTransmissivityModel
 (
     const dictionary&,
     const polyPatch& pp

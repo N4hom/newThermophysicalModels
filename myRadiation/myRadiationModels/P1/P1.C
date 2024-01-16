@@ -117,7 +117,12 @@ Foam::myRadiation::P1::P1(const volScalarField& T)
         mesh_,
         dimensionedScalar(dimMass/dimLength/pow3(dimTime), Zero)
     )
-{}
+{
+    Info << "Constructing P1 radiation model " << endl;
+
+    Info << "typeName " << typeName << endl;
+
+}
 
 
 Foam::myRadiation::P1::P1(const dictionary& dict, const volScalarField& T)
@@ -207,12 +212,21 @@ bool Foam::myRadiation::P1::read()
 
 void Foam::myRadiation::P1::calculate()
 {
+    Info << "P1 calculate " << endl;
+
+    Info << "a_ = absorptionEmission_->a();" << endl;
     a_ = absorptionEmission_->a();
+    Info << "e_ = absorptionEmission_->e();" << endl;
     e_ = absorptionEmission_->e();
+    Info << "E_ = absorptionEmission_->E();" << endl;
     E_ = absorptionEmission_->E();
     const volScalarField sigmaEff(scatter_->sigmaEff());
 
     const dimensionedScalar a0("a0", a_.dimensions(), ROOTVSMALL);
+    Info << "E_ dimensions " << E_.dimensions() << endl;
+    Info << "G_ dimensions " << G_.dimensions() << endl;
+    Info << "e_ dimensions " << e_.dimensions() << endl;
+    Info << "a_ dimensions " << a_.dimensions() << endl;
 
     // Construct diffusion
     const volScalarField gamma
@@ -228,7 +242,10 @@ void Foam::myRadiation::P1::calculate()
         1.0/(3.0*a_ + sigmaEff + a0)
     );
 
+    Info << "gamma " << endl;
+    Info << "before failed lookup " << fvm::Sp(a_, G_) << endl;
     // Solve G transport equation
+    Info << "Solving G transport equation " << endl;
     solve
     (
         fvm::laplacian(gamma, G_)
@@ -237,6 +254,7 @@ void Foam::myRadiation::P1::calculate()
       - 4.0*(e_*physicoChemical::sigma*pow4(T_)) - E_
     );
 
+    Info << "Calculating radiative heat fluxes on boundaries " << endl;
     // Calculate radiative heat flux on boundaries.
     volScalarField::Boundary& qrBf = qr_.boundaryFieldRef();
     const volScalarField::Boundary& GBf = G_.boundaryField();
@@ -276,9 +294,14 @@ Foam::tmp<Foam::volScalarField> Foam::myRadiation::P1::Rp() const
 Foam::tmp<Foam::DimensionedField<Foam::scalar, Foam::volMesh>>
 Foam::myRadiation::P1::Ru() const
 {
+    Info << "In P1::Ru() " << endl;
     const volScalarField::Internal& G = G_();
+    Info << "const volScalarField::Internal& G = G_();" << endl;
+
     const volScalarField::Internal E = absorptionEmission_->ECont()()();
+    Info << "const volScalarField::Internal E = absorptionEmission_->ECont()()();" << endl;
     const volScalarField::Internal a = absorptionEmission_->aCont()()();
+    Info << "const volScalarField::Internal a = absorptionEmission_->aCont()()();" << endl;
 
     return a*G - E;
 }

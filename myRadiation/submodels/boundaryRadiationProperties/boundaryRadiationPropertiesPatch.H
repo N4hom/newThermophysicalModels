@@ -48,7 +48,7 @@ SourceFiles
 
 namespace Foam
 {
-namespace radiation
+namespace myRadiation
 {
 /*---------------------------------------------------------------------------*\
               Class boundaryRadiationPropertiesPatch Declaration
@@ -88,7 +88,7 @@ protected:
 public:
 
     //- Runtime type information
-    TypeName("boundaryRadiationPropertiesPatch");
+    TypeName("myBoundaryRadiationPropertiesPatch");
 
       // Declare runtime constructor selection table
 

@@ -32,7 +32,7 @@ License
 
 namespace Foam
 {
-    namespace radiation
+    namespace myRadiation
     {
         defineTypeNameAndDebug(wallAbsorptionEmissionModel, 0);
         defineRunTimeSelectionTable(wallAbsorptionEmissionModel, dictionary);
@@ -42,7 +42,7 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::radiation::wallAbsorptionEmissionModel::wallAbsorptionEmissionModel
+Foam::myRadiation::wallAbsorptionEmissionModel::wallAbsorptionEmissionModel
 (
     const dictionary&,
     const polyPatch& pp
@@ -54,7 +54,7 @@ Foam::radiation::wallAbsorptionEmissionModel::wallAbsorptionEmissionModel
 
 // * * * * * * * * * * * * * * * * Destructor    * * * * * * * * * * * * * * //
 
-Foam::radiation::wallAbsorptionEmissionModel::~wallAbsorptionEmissionModel()
+Foam::myRadiation::wallAbsorptionEmissionModel::~wallAbsorptionEmissionModel()
 {}
 
 

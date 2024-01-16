@@ -62,6 +62,9 @@ Foam::myRadiation::absorptionEmissionModel::~absorptionEmissionModel()
 Foam::tmp<Foam::volScalarField>
 Foam::myRadiation::absorptionEmissionModel::a(const label bandI) const
 {
+    Info << "a(const label bandI) " << endl;
+    Info << "dimension aDisp " << aDisp(bandI)->dimensions() << endl;
+    Info << "dimension aCont " << aCont(bandI)->dimensions() << endl;
     return aDisp(bandI) + aCont(bandI);
 }
 
@@ -69,6 +72,7 @@ Foam::myRadiation::absorptionEmissionModel::a(const label bandI) const
 Foam::tmp<Foam::volScalarField>
 Foam::myRadiation::absorptionEmissionModel::aCont(const label bandI) const
 {
+    Info << "aCont function " << endl;
     return tmp<volScalarField>
     (
         new volScalarField

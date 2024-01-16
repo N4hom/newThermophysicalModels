@@ -32,7 +32,7 @@ License
 
 namespace Foam
 {
-    namespace radiation
+    namespace myRadiation
     {
         defineTypeNameAndDebug(constantTransmissivity, 0);
 
@@ -48,7 +48,7 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::radiation::constantTransmissivity::constantTransmissivity
+Foam::myRadiation::constantTransmissivity::constantTransmissivity
 (
     const dictionary& dict,
     const polyPatch& pp
@@ -63,7 +63,7 @@ Foam::radiation::constantTransmissivity::constantTransmissivity
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::constantTransmissivity::t
+Foam::myRadiation::constantTransmissivity::t
 (
     const label bandI,
     vectorField* incomingDirection,
@@ -74,7 +74,7 @@ Foam::radiation::constantTransmissivity::t
 }
 
 
-Foam::scalar Foam::radiation::constantTransmissivity::t
+Foam::scalar Foam::myRadiation::constantTransmissivity::t
 (
     const label faceI,
     const label bandI,

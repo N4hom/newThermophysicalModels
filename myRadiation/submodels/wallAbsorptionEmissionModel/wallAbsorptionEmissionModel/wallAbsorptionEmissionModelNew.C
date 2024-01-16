@@ -30,7 +30,7 @@ License
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::autoPtr<Foam::radiation::wallAbsorptionEmissionModel> Foam::radiation::
+Foam::autoPtr<Foam::myRadiation::wallAbsorptionEmissionModel> Foam::myRadiation::
 wallAbsorptionEmissionModel::New
 (
     const dictionary& dict,

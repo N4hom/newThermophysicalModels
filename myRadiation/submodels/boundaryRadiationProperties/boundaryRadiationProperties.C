@@ -32,7 +32,7 @@ License
 
 namespace Foam
 {
-    namespace radiation
+    namespace myRadiation
     {
         defineTypeNameAndDebug(boundaryRadiationProperties, 0);
     }
@@ -41,7 +41,7 @@ namespace Foam
 
 // * * * * * * * * * * * * * * * * Constructors * * * * * * * * * * * * * * //
 
-Foam::radiation::boundaryRadiationProperties::boundaryRadiationProperties
+Foam::myRadiation::boundaryRadiationProperties::boundaryRadiationProperties
 (
     const fvMesh& mesh
 )
@@ -55,6 +55,7 @@ Foam::radiation::boundaryRadiationProperties::boundaryRadiationProperties
     radBoundaryPropertiesPtrList_(mesh.boundary().size()),
     radZonePropertiesPtrList_(mesh.faceZones().size())
 {
+    Info << "boundaryRadiationProperties::typeName " << boundaryRadiationProperties::typeName << endl;
     IOobject boundaryIO
     (
         boundaryRadiationProperties::typeName,
@@ -67,10 +68,10 @@ Foam::radiation::boundaryRadiationProperties::boundaryRadiationProperties
 
     if (boundaryIO.typeHeaderOk<IOdictionary>(true))
     {
-        const radiationModel& radiation =
-            mesh.lookupObject<radiationModel>
+        const myRadiationModel& radiation =
+            mesh.lookupObject<myRadiationModel>
             (
-                "radiationProperties"
+                "myRadiationProperties"
             );
 
         // Model number of bands
@@ -190,7 +191,7 @@ Foam::radiation::boundaryRadiationProperties::boundaryRadiationProperties
 // * * * * * * * * * * * * * * * Member Functions * * * * * * * * * * * * *  //
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::boundaryRadiationProperties::emissivity
+Foam::myRadiation::boundaryRadiationProperties::emissivity
 (
     const label patchi,
     const label bandi,
@@ -198,6 +199,7 @@ Foam::radiation::boundaryRadiationProperties::emissivity
     scalarField* T
 ) const
 {
+    Info << "emissivity " << endl;
     if (radBoundaryPropertiesPtrList_.set(patchi))
     {
         return radBoundaryPropertiesPtrList_[patchi].e
@@ -218,7 +220,7 @@ Foam::radiation::boundaryRadiationProperties::emissivity
 }
 
 
-Foam::scalar Foam::radiation::boundaryRadiationProperties::faceEmissivity
+Foam::scalar Foam::myRadiation::boundaryRadiationProperties::faceEmissivity
 (
     const label patchi,
     const label facei,
@@ -249,7 +251,7 @@ Foam::scalar Foam::radiation::boundaryRadiationProperties::faceEmissivity
 
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::boundaryRadiationProperties::absorptivity
+Foam::myRadiation::boundaryRadiationProperties::absorptivity
 (
     const label patchi,
     const label bandi,
@@ -277,7 +279,7 @@ Foam::radiation::boundaryRadiationProperties::absorptivity
 }
 
 
-Foam::scalar Foam::radiation::boundaryRadiationProperties::faceAbsorptivity
+Foam::scalar Foam::myRadiation::boundaryRadiationProperties::faceAbsorptivity
 (
     const label patchi,
     const label facei,
@@ -308,7 +310,7 @@ Foam::scalar Foam::radiation::boundaryRadiationProperties::faceAbsorptivity
 
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::boundaryRadiationProperties::transmissivity
+Foam::myRadiation::boundaryRadiationProperties::transmissivity
 (
     const label patchi,
     const label bandi,
@@ -336,7 +338,7 @@ Foam::radiation::boundaryRadiationProperties::transmissivity
 }
 
 
-Foam::scalar Foam::radiation::boundaryRadiationProperties::faceTransmissivity
+Foam::scalar Foam::myRadiation::boundaryRadiationProperties::faceTransmissivity
 (
     const label patchi,
     const label facei,
@@ -367,7 +369,7 @@ Foam::scalar Foam::radiation::boundaryRadiationProperties::faceTransmissivity
 
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::boundaryRadiationProperties::zoneTransmissivity
+Foam::myRadiation::boundaryRadiationProperties::zoneTransmissivity
 (
     const label zonei,
     const labelUList& faceIDs,
@@ -404,7 +406,7 @@ Foam::radiation::boundaryRadiationProperties::zoneTransmissivity
 
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::boundaryRadiationProperties::diffReflectivity
+Foam::myRadiation::boundaryRadiationProperties::diffReflectivity
 (
     const label patchi,
     const label bandi,
@@ -432,7 +434,7 @@ Foam::radiation::boundaryRadiationProperties::diffReflectivity
 }
 
 
-Foam::scalar Foam::radiation::boundaryRadiationProperties::faceDiffReflectivity
+Foam::scalar Foam::myRadiation::boundaryRadiationProperties::faceDiffReflectivity
 (
     const label patchi,
     const label facei,
@@ -463,7 +465,7 @@ Foam::scalar Foam::radiation::boundaryRadiationProperties::faceDiffReflectivity
 
 
 Foam::tmp<Foam::scalarField>
-Foam::radiation::boundaryRadiationProperties::specReflectivity
+Foam::myRadiation::boundaryRadiationProperties::specReflectivity
 (
     const label patchi,
     const label bandi,
@@ -491,7 +493,7 @@ Foam::radiation::boundaryRadiationProperties::specReflectivity
 }
 
 
-Foam::scalar Foam::radiation::boundaryRadiationProperties::faceSpecReflectivity
+Foam::scalar Foam::myRadiation::boundaryRadiationProperties::faceSpecReflectivity
 (
     const label patchi,
     const label facei,

@@ -43,7 +43,7 @@ Description
 
 namespace Foam
 {
-namespace radiation
+namespace myRadiation
 {
 
 /*---------------------------------------------------------------------------*\

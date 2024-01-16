@@ -30,7 +30,7 @@ License
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::autoPtr<Foam::radiation::wallTransmissivityModel> Foam::radiation::
+Foam::autoPtr<Foam::myRadiation::wallTransmissivityModel> Foam::myRadiation::
 wallTransmissivityModel::New
 (
     const dictionary& dict,
