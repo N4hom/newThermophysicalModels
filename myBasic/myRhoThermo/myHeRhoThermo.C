@@ -150,7 +150,7 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculate
 template<class BasicPsiThermo, class MixtureType>
 void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculateFromRhoE()
 {
-    Info << "calculateFromRhoE " << endl;
+    // Info << "calculateFromRhoE " << endl;
     scalarField& eCells = this->heRef().primitiveFieldRef();
     scalarField& TCells = this->TRef().primitiveFieldRef();
     scalarField& pCells = this->pRef().primitiveFieldRef();
@@ -165,9 +165,9 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculateFromRhoE()
 
 
     // The temperature and the pressure should be read from time folders
-    // when calculation is initialized and updated only at the end of a time step.
+    // when calculation is initialized, and updated only at the end of a time step.
     // Obviously the corresponding density needs to be consistent with p,T.
-    // It is up to the user to ensure this
+    // It is up to the user to ensure this when the calculation is initialized.
     forAll(this->rho_, celli)
     {
         const typename MixtureType::thermoType& mixture_ =
@@ -180,9 +180,9 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculateFromRhoE()
 
         if (!initialize_)
         {
-            Info << "ei " << ei << endl;
+            //Info << "ei " << ei << endl;
             TCells[celli] = mixture_.TRhoE(Ti, rhoi, ei);
-            Info << "Ti " << TCells[celli] << endl;
+            //Info << "Ti " << TCells[celli] << endl;
             scalar pi = mixture_.p(rhoi, ei, Ti);
             pCells[celli] = pi;
         }
@@ -256,6 +256,31 @@ void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::calculateFromRhoE()
     Info << "End of calculateFromRhoE " << endl;
 }
 
+template<class BasicPsiThermo, class MixtureType>
+void Foam::myHeRhoThermo<BasicPsiThermo, MixtureType>::correctTemperature()
+{
+
+    scalarField& eCells = this->heRef().primitiveFieldRef();
+    scalarField& TCells = this->TRef().primitiveFieldRef();
+
+
+    forAll(this->rho_, celli)
+    {
+        const typename MixtureType::thermoType& mixture_ =
+            this->cellMixture(celli);
+
+        const scalar& rhoi(this->rho_[celli]);
+        //Info << "scalar& rhoi(this->rho_[celli]) " << rhoi << endl;
+        scalar& ei(eCells[celli]);
+        scalar& Ti(TCells[celli]);
+
+        TCells[celli] = mixture_.TRhoE(Ti, rhoi, ei);
+
+    }
+    this->TRef().correctBoundaryConditions();
+
+
+}
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
 template<class BasicPsiThermo, class MixtureType>

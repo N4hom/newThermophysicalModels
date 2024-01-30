@@ -252,14 +252,15 @@ Foam::tmp<Foam::fvScalarMatrix> Foam::myRadiation::myRadiationModel::Sh
     const volScalarField& he
 ) const
 {
-    Info << " const volScalarField Cpv(thermo.Cpv()); " << endl;
+    // Info << " const volScalarField Cpv(thermo.Cpv()); " << endl;
+    // Info << thermo.Cpv() << endl;
     const volScalarField Cpv(thermo.Cpv());
 
-    Info << " const volScalarField T3(pow3(T_)); " << endl;
+   // Info << " const volScalarField T3(pow3(T_)); " << endl;
     const volScalarField T3(pow3(T_));
 
-    Info << "Ru() " << Ru() << endl;
-    Info << "Rp() " << Rp() << endl;
+   // Info << "Ru() " << Ru() << endl;
+   // Info << "Rp() " << Rp() << endl;
 
     return
     (

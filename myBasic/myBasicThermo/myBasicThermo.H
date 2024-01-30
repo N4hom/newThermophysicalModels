@@ -378,6 +378,9 @@ public:
 
         virtual void correctFromRhoE() = 0;
 
+        // Update temperature for radiation-matter coupling
+        virtual void correctTemperature() = 0;
+
         //- Return the name of the thermo physics
         virtual word thermoName() const = 0;
 

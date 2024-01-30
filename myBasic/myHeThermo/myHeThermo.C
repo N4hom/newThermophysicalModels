@@ -114,8 +114,8 @@ void Foam::myHeThermo<BasicThermo, MixtureType>::initFromRhoT
 
     forAll(heCells, celli)
     {
-        Info << "rhoCells[celli] " << rhoCells[celli] << endl; 
-        Info << "heCells[celli] " << this->cellMixture(celli).HErhoT(rhoCells[celli], heCells[celli], TCells[celli]) << endl;
+        //Info << "rhoCells[celli] " << rhoCells[celli] << endl; 
+        //Info << "heCells[celli] " << this->cellMixture(celli).HErhoT(rhoCells[celli], heCells[celli], TCells[celli]) << endl;
         heCells[celli] =
             this->cellMixture(celli).HErhoT(rhoCells[celli], heCells[celli], TCells[celli]);
     }

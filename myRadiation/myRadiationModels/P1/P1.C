@@ -33,6 +33,8 @@ License
 #include "scatterModel.H"
 #include "constants.H"
 #include "addToRunTimeSelectionTable.H"
+#include "fvmDdt.H"
+
 
 using namespace Foam::constant;
 
@@ -214,19 +216,19 @@ void Foam::myRadiation::P1::calculate()
 {
     Info << "P1 calculate " << endl;
 
-    Info << "a_ = absorptionEmission_->a();" << endl;
+   // Info << "a_ = absorptionEmission_->a();" << endl;
     a_ = absorptionEmission_->a();
-    Info << "e_ = absorptionEmission_->e();" << endl;
+   // Info << "e_ = absorptionEmission_->e();" << endl;
     e_ = absorptionEmission_->e();
-    Info << "E_ = absorptionEmission_->E();" << endl;
+   // Info << "E_ = absorptionEmission_->E();" << endl;
     E_ = absorptionEmission_->E();
     const volScalarField sigmaEff(scatter_->sigmaEff());
 
     const dimensionedScalar a0("a0", a_.dimensions(), ROOTVSMALL);
-    Info << "E_ dimensions " << E_.dimensions() << endl;
-    Info << "G_ dimensions " << G_.dimensions() << endl;
-    Info << "e_ dimensions " << e_.dimensions() << endl;
-    Info << "a_ dimensions " << a_.dimensions() << endl;
+    // Info << "E_ dimensions " << E_.dimensions() << endl;
+    // Info << "G_ dimensions " << G_.dimensions() << endl;
+    // Info << "e_ dimensions " << e_.dimensions() << endl;
+    // Info << "a_ dimensions " << a_.dimensions() << endl;
 
     // Construct diffusion
     const volScalarField gamma
@@ -241,20 +243,49 @@ void Foam::myRadiation::P1::calculate()
         ),
         1.0/(3.0*a_ + sigmaEff + a0)
     );
+    //const scalar c(3e8);
+    //const dimensionedScalar c_(dimLength/dimTime, c);
+    const volScalarField invSpeedOfLight
+    (
+        IOobject
+        (
+            "speedOfLight",
+            G_.mesh().time().timeName(),
+            G_.mesh()
+        ),
+        G_.mesh(),
+        dimensionedScalar(dimless/dimVelocity, 1/2.998e+8)
+    );
+// speedOfSound_
+//     (
+//         IOobject
+//         (
+//             phasePropertyName("thermo:speedOfSound", phaseName),
+//             mesh.time().timeName(),
+//             mesh
+//         ),
+//         mesh,
+//         dimensionedScalar(dimVelocity, 0.0)
+//     )
 
-    Info << "gamma " << endl;
-    Info << "before failed lookup " << fvm::Sp(a_, G_) << endl;
+    // Info << "gamma " << endl;
+    // Info << "before failed lookup " << fvm::Sp(a_, G_) << endl;
     // Solve G transport equation
     Info << "Solving G transport equation " << endl;
     solve
     (
-        fvm::laplacian(gamma, G_)
-      - fvm::Sp(a_, G_)
+     //    fvm::laplacian(gamma, G_)
+     //  - fvm::Sp(a_, G_)
+     // ==
+     //  - 4.0*(e_*physicoChemical::sigma*pow4(T_)) - E_
+        fvm::ddt(invSpeedOfLight, G_) 
+      - fvm::laplacian(gamma, G_)
+      + fvm::Sp(a_, G_)
      ==
-      - 4.0*(e_*physicoChemical::sigma*pow4(T_)) - E_
+        4.0*(e_*physicoChemical::sigma*pow4(T_)) - E_
     );
 
-    Info << "Calculating radiative heat fluxes on boundaries " << endl;
+    // Info << "Calculating radiative heat fluxes on boundaries " << endl;
     // Calculate radiative heat flux on boundaries.
     volScalarField::Boundary& qrBf = qr_.boundaryFieldRef();
     const volScalarField::Boundary& GBf = G_.boundaryField();
@@ -294,14 +325,14 @@ Foam::tmp<Foam::volScalarField> Foam::myRadiation::P1::Rp() const
 Foam::tmp<Foam::DimensionedField<Foam::scalar, Foam::volMesh>>
 Foam::myRadiation::P1::Ru() const
 {
-    Info << "In P1::Ru() " << endl;
+    // Info << "In P1::Ru() " << endl;
     const volScalarField::Internal& G = G_();
-    Info << "const volScalarField::Internal& G = G_();" << endl;
+    // Info << "const volScalarField::Internal& G = G_();" << endl;
 
     const volScalarField::Internal E = absorptionEmission_->ECont()()();
-    Info << "const volScalarField::Internal E = absorptionEmission_->ECont()()();" << endl;
+    // Info << "const volScalarField::Internal E = absorptionEmission_->ECont()()();" << endl;
     const volScalarField::Internal a = absorptionEmission_->aCont()()();
-    Info << "const volScalarField::Internal a = absorptionEmission_->aCont()()();" << endl;
+    // Info << "const volScalarField::Internal a = absorptionEmission_->aCont()()();" << endl;
 
     return a*G - E;
 }

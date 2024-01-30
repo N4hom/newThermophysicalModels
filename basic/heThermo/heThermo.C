@@ -70,7 +70,7 @@ void Foam::heThermo<BasicThermo, MixtureType>::init
     {
         heCells[celli] =
             this->cellMixture(celli).HE(pCells[celli], TCells[celli]);
-        Info << "heCells[celli] " << heCells[celli] << endl;
+        //Info << "heCells[celli] " << heCells[celli] << endl;
     }
 
     volScalarField::Boundary& heBf = he.boundaryFieldRef();

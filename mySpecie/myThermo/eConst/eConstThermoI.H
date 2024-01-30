@@ -135,7 +135,7 @@ inline Foam::scalar Foam::eConstThermo<EquationOfState>::gamma
     const scalar T
 ) const
 {
-    Info << "gamma " << EquationOfState::gamma(rho, e, T, Cv(rho, e, T));
+   // Info << "gamma " << EquationOfState::gamma(rho, e, T, Cv(rho, e, T));
     return EquationOfState::gamma(rho, e, T, Cv(rho, e, T)); 
 }
 

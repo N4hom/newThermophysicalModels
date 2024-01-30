@@ -118,6 +118,9 @@ public:
         virtual void correctFromRhoE();
         //- Update properties from T
         //virtual void correctT();
+
+        // Correction for coupling radiation-matter equation
+        virtual void correctTemperature();
 };
 
 

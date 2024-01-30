@@ -98,8 +98,8 @@ inline Foam::scalar Foam::myPerfectGas<Specie>::cSqr(scalar rho , scalar e, scal
     // Info << "R \n" << this->R() << endl;
     // Info << "T \n" << T << endl;
 
-    Info << "here " << endl;
-    Info << "gamma(rho, e, T, cv) " << gamma(rho, e, T, cv)<< endl;
+    // Info << "here " << endl;
+    // Info << "gamma(rho, e, T, cv) " << gamma(rho, e, T, cv)<< endl;
 
     return gamma(rho, e, T, cv) * this->R() * T;
 }

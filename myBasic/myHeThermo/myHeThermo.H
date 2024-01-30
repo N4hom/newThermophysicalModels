@@ -66,7 +66,7 @@ protected:
     // Protected Member Functions
        volScalarField& heRef()
         {
-            Info << "heRef " << endl;
+            //Info << "heRef " << endl;
             return he_;
         }
 

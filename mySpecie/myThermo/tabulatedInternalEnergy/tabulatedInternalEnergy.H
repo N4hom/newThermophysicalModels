@@ -85,7 +85,7 @@ public:
                 const scalar T
             ) const
             {
-                Info << "Cpv " << thermo.Cv(rho, e, T) << endl;
+                //Info << "Cpv " << thermo.Cv(rho, e, T) << endl;
                 return thermo.Cv(rho, e, T);
             }
 
@@ -152,8 +152,8 @@ public:
                 const scalar T
             ) const
             {
-                Info << "In HErhoT " << endl;
-                Info << "rho = " << rho << endl;
+                //Info << "In HErhoT " << endl;
+                //Info << "rho = " << rho << endl;
                 return thermo.EsRhoT(rho, e, T);
             }
 

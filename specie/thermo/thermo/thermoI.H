@@ -354,7 +354,7 @@ inline Foam::scalar Foam::species::thermo<Thermo, Type>::THE
     const scalar T0
 ) const
 {
-    Info << "Returning temperature from internal energy " << endl;
+   // Info << "Returning temperature from internal energy " << endl;
     return Type<thermo<Thermo, Type>>::THE(*this, he, p, T0);
 }
 

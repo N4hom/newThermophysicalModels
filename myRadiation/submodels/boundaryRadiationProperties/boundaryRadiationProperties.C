@@ -199,7 +199,7 @@ Foam::myRadiation::boundaryRadiationProperties::emissivity
     scalarField* T
 ) const
 {
-    Info << "emissivity " << endl;
+    //Info << "emissivity " << endl;
     if (radBoundaryPropertiesPtrList_.set(patchi))
     {
         return radBoundaryPropertiesPtrList_[patchi].e

@@ -113,7 +113,7 @@ inline Foam::scalar Foam::mySpecies::thermo<Thermo, Type>::TFromRhoE
     const bool diagnostics
 ) const
 {
-    Info << "TFromRhoE " << endl;
+    //Info << "TFromRhoE " << endl;
 
 
     // I need to find a way to do a lookup without this whole thing below.
@@ -334,8 +334,8 @@ inline Foam::scalar
 Foam::mySpecies::thermo<Thermo, Type>::HErhoT(const scalar rho, const scalar e, const scalar T) const
 {
     // Implementation of Type<thermo<Thermo, Type>>::HErhoT in sensibleInternalEnergy.H
-    Info << "In myThermo \n" << endl; 
-    Info << "rho = " << rho << endl;
+    // Info << "In myThermo \n" << endl; 
+    // Info << "rho = " << rho << endl;
     return Type<thermo<Thermo, Type>>::HErhoT(*this, rho, e, T);
 }
 

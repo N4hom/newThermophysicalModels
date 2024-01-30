@@ -132,8 +132,8 @@ inline Foam::scalar Foam::eTabulated<EquationOfState>::EsRhoT
 ) const
 {
     //Info << "returned Es " << eTable_.lookup(rho,T) << endl;
-    Info << "reverseLookupY(T, rho),  rho = " << rho << endl;
-    Info << "T = " << T << endl; 
+    // Info << "reverseLookupY(T, rho),  rho = " << rho << endl;
+    // Info << "T = " << T << endl; 
     return this->TTable_.reverseLookupY(T, rho);
 }
 
@@ -158,9 +158,9 @@ inline Foam::scalar Foam::eTabulated<EquationOfState>::tabulatedTRhoEs
     const scalar T
 ) const
 {
-    Info << "rho " << rho << endl;
-    Info << "e " << e << endl;
-    Info << "T " << this->TTable_.lookup(rho, e) << endl;
+    // Info << "rho " << rho << endl;
+    // Info << "e " << e << endl;
+    // Info << "T " << this->TTable_.lookup(rho, e) << endl;
     return this->TTable_.lookup(rho, e);
 }
 
@@ -172,7 +172,7 @@ inline Foam::scalar Foam::eTabulated<EquationOfState>::gamma
     const scalar T
 ) const
 {
-    Info << "gamma " << EquationOfState::gamma(rho, e, T, Cv(rho, e, T));
+    //Info << "gamma " << EquationOfState::gamma(rho, e, T, Cv(rho, e, T));
     return EquationOfState::gamma(rho, e, T, Cv(rho, e, T)); 
 }
 
