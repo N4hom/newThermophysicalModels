@@ -1,0 +1,24 @@
+SOURCE = \
+myRadiationModels/myRadiationModel/myRadiationModel.C \
+myRadiationModels/myRadiationModel/myRadiationModelNew.C \
+myRadiationModels/noRadiation/noRadiation.C \
+myRadiationModels/P1/P1.C \
+submodels/scatterModel/scatterModel/scatterModel.C \
+submodels/scatterModel/scatterModel/scatterModelNew.C \
+submodels/scatterModel/noScatter/noScatter.C \
+submodels/wallTransmissivityModel/wallTransmissivityModel/wallTransmissivityModel.C \
+submodels/wallTransmissivityModel/wallTransmissivityModel/wallTransmissivityModelNew.C \
+submodels/wallTransmissivityModel/constantTransmissivity/constantTransmissivity.C \
+submodels/wallAbsorptionEmissionModel/wallAbsorptionEmissionModel/wallAbsorptionEmissionModel.C \
+submodels/wallAbsorptionEmissionModel/wallAbsorptionEmissionModel/wallAbsorptionEmissionModelNew.C \
+submodels/absorptionEmissionModel/absorptionEmissionModel/absorptionEmissionModel.C \
+submodels/absorptionEmissionModel/absorptionEmissionModel/absorptionEmissionModelNew.C \
+submodels/absorptionEmissionModel/noAbsorptionEmission/noAbsorptionEmission.C \
+submodels/absorptionEmissionModel/constantAbsorptionEmission/constantAbsorptionEmission.C \
+submodels/boundaryRadiationProperties/boundaryRadiationProperties.C \
+submodels/boundaryRadiationProperties/boundaryRadiationPropertiesPatch.C \
+submodels/boundaryRadiationProperties/lookup/lookup.C \
+derivedFvPatchFields/MarshakRadiation/MarshakRadiationFvPatchScalarField.C \
+derivedFvPatchFields/MarshakRadiationFixedTemperature/MarshakRadiationFixedTemperatureFvPatchScalarField.C \
+
+# sources

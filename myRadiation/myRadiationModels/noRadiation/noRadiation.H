@@ -71,7 +71,7 @@ public:
     // Runtime type information should be different than the one in the standard OF
 
     //- Runtime type information   
-    TypeName("myNone");
+    TypeName("none");
 
 
     // Constructors

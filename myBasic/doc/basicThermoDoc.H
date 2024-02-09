@@ -28,13 +28,8 @@ License
 \defgroup grpRhoThermo Density-based thermophysical models
 @{
     \ingroup grpThermophysicalModels
-    This group contains density-based thermophysical models
+    thermophysical models with density and internal energy as independent variables 
 @}
 
-\defgroup grpPsiThermo Compressibility-based thermophysical models
-@{
-    \ingroup grpThermophysicalModels
-    This group contains compressibility-based thermophysical models
-@}
 
 \*---------------------------------------------------------------------------*/

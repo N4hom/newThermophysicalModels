@@ -61,7 +61,7 @@ class noAbsorptionEmission
 public:
 
     //- Runtime type information
-    TypeName("myNone");
+    TypeName("none");
 
 
     // Constructors

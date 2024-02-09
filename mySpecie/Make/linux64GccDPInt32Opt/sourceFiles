@@ -1,0 +1,5 @@
+SOURCE = \
+myAtomicWeights/myAtomicWeights.C \
+mySpecie/mySpecie.C \
+
+# sources

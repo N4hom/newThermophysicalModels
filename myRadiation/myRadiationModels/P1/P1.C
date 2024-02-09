@@ -243,8 +243,8 @@ void Foam::myRadiation::P1::calculate()
         ),
         1.0/(3.0*a_ + sigmaEff + a0)
     );
-    //const scalar c(3e8);
-    //const dimensionedScalar c_(dimLength/dimTime, c);
+    
+
     const volScalarField invSpeedOfLight
     (
         IOobject
@@ -256,20 +256,8 @@ void Foam::myRadiation::P1::calculate()
         G_.mesh(),
         dimensionedScalar(dimless/dimVelocity, 1/2.998e+8)
     );
-// speedOfSound_
-//     (
-//         IOobject
-//         (
-//             phasePropertyName("thermo:speedOfSound", phaseName),
-//             mesh.time().timeName(),
-//             mesh
-//         ),
-//         mesh,
-//         dimensionedScalar(dimVelocity, 0.0)
-//     )
 
-    // Info << "gamma " << endl;
-    // Info << "before failed lookup " << fvm::Sp(a_, G_) << endl;
+
     // Solve G transport equation
     Info << "Solving G transport equation " << endl;
     solve

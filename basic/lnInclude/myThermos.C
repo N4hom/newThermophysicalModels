@@ -1,1 +1,0 @@
-../myThermo/myThermos.C

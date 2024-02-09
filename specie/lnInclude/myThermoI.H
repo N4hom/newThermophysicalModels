@@ -1,1 +1,0 @@
-../thermo/myThermo/myThermoI.H

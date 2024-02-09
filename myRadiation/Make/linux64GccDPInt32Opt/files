@@ -1,0 +1,44 @@
+/* Radiation model */
+SOURCE += myRadiationModels/myRadiationModel/myRadiationModel.C
+SOURCE += myRadiationModels/myRadiationModel/myRadiationModelNew.C
+SOURCE += myRadiationModels/noRadiation/noRadiation.C
+SOURCE += myRadiationModels/P1/P1.C
+
+
+/* Scatter model */
+SOURCE += submodels/scatterModel/scatterModel/scatterModel.C
+SOURCE += submodels/scatterModel/scatterModel/scatterModelNew.C
+SOURCE += submodels/scatterModel/noScatter/noScatter.C
+SOURCE += /*submodels/scatterModel/constantScatter/constantScatter.C
+*/
+
+/* Wall sub-models */
+SOURCE += submodels/wallTransmissivityModel/wallTransmissivityModel/wallTransmissivityModel.C
+SOURCE += submodels/wallTransmissivityModel/wallTransmissivityModel/wallTransmissivityModelNew.C
+SOURCE += submodels/wallTransmissivityModel/constantTransmissivity/constantTransmissivity.C
+
+SOURCE += submodels/wallAbsorptionEmissionModel/wallAbsorptionEmissionModel/wallAbsorptionEmissionModel.C
+SOURCE += submodels/wallAbsorptionEmissionModel/wallAbsorptionEmissionModel/wallAbsorptionEmissionModelNew.C
+
+/* Absorption/Emission model */
+SOURCE += submodels/absorptionEmissionModel/absorptionEmissionModel/absorptionEmissionModel.C
+SOURCE += submodels/absorptionEmissionModel/absorptionEmissionModel/absorptionEmissionModelNew.C
+SOURCE += submodels/absorptionEmissionModel/noAbsorptionEmission/noAbsorptionEmission.C
+SOURCE += submodels/absorptionEmissionModel/constantAbsorptionEmission/constantAbsorptionEmission.C
+SOURCE += submodels/boundaryRadiationProperties/boundaryRadiationProperties.C
+SOURCE += submodels/boundaryRadiationProperties/boundaryRadiationPropertiesPatch.C
+
+/* Types of radiative walls */
+
+SOURCE += submodels/boundaryRadiationProperties/lookup/lookup.C
+
+/* Solar calculator model */
+
+
+/* Boundary conditions */
+SOURCE += derivedFvPatchFields/MarshakRadiation/MarshakRadiationFvPatchScalarField.C
+SOURCE += derivedFvPatchFields/MarshakRadiationFixedTemperature/MarshakRadiationFixedTemperatureFvPatchScalarField.C
+
+
+
+LIB = $(FOAM_USER_LIBBIN)/libmyRadiationModels

@@ -1,0 +1,7 @@
+SOURCE = \
+myBasicThermo/myBasicThermo.C \
+myFluidThermo/myFluidThermo.C \
+myRhoThermo/myRhoThermo.C \
+myRhoThermo/myRhoThermos.C \
+
+# sources
